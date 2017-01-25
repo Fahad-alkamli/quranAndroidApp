@@ -22,7 +22,7 @@ public class CommonFunctions {
         ArrayList<SurahItem> list=new ArrayList<>();
         list.add(new SurahItem("Al-Fatihah","001"));
         list.add(new SurahItem("Al-Baqarah ","002"));
-        Log.e(TAG,Integer.toString(list.size()));
+       // Log.e(TAG,Integer.toString(list.size()));
         return list;
     }
 
