@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center"
+    tools:context="alkamli.fahad.quranapp.quranapp.PlayerActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/title"
+        android:text="Sourah Title"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="28sp"
+        android:layout_marginBottom="10dp"
+        tools:ignore="HardcodedText" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <Button
+            android:text="اعادة"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape"
+            android:layout_marginEnd="5dp"
+            android:onClick="rewind"
+            style="?android:attr/buttonBarButtonStyle"
+            />
+        <Button
+            android:text="تشغيل"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape"
+            android:layout_marginEnd="5dp"
+            android:onClick="playOrPause"
+            android:id="@+id/playButton"
+            android:padding="10dp"
+            style="?android:attr/buttonBarButtonStyle"
+            />
+
+        <Button
+            android:text="ايقاف"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape"
+            android:layout_marginEnd="5dp"
+            android:onClick="stop"
+            android:id="@+id/stopButton"
+            style="?android:attr/buttonBarButtonStyle"
+            />
+
+        <Button
+            android:text="تسريع"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape"
+            android:onClick="fastforward"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_marginEnd="5dp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
