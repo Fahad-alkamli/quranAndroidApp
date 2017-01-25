@@ -17,11 +17,11 @@ public class CommonFunctions {
 
     public static final String TAG="Alkamli";
 
-    public static ArrayList<SurahItem> getSourahList()
+    public static ArrayList<SurahItem> getSourahList(Context context)
     {
         ArrayList<SurahItem> list=new ArrayList<>();
-        list.add(new SurahItem("Al-Fatihah","001"));
-        list.add(new SurahItem("Al-Baqarah ","002"));
+        list.add(new SurahItem(context.getString(R.string.Al_Fatihah),"001"));
+        list.add(new SurahItem(context.getString(R.string.Al_Baqarah),"002"));
        // Log.e(TAG,Integer.toString(list.size()));
         return list;
     }

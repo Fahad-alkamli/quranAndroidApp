@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">QuranApp</string>
+    <string name="files_url">http://server6.mp3quran.net/thubti/</string>
+    <string name="Al_Fatihah">Al-Fatihah</string>
+    <string name="Al_Baqarah">"Al-Baqarah "</string>
+    <string name="Sourah_Title">Sourah Title</string>
+    <string name="rewind">Rewind</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="fastforward">Fastforward</string>
 </resources>

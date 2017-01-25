@@ -21,7 +21,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list=(RecyclerView) findViewById(R.id.list);
-        list.setAdapter(new HomeAdapter(this, CommonFunctions.getSourahList()));
+        list.setAdapter(new HomeAdapter(this, CommonFunctions.getSourahList(this)));
         list.setLayoutManager(new LinearLayoutManager(this));
     }
 
