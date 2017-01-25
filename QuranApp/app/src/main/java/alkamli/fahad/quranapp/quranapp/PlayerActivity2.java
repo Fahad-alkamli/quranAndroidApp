@@ -99,7 +99,7 @@ public class PlayerActivity2 extends AppCompatActivity {
         }
         //Toast.makeText(getApplicationContext(),"Playing",Toast.LENGTH_LONG).show();
         //playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_pause_black_24dp));
-        playButton.setText("ايقاف مؤقت");
+        playButton.setText(R.string.pause);
         playButton.setTag(true);
     }
 
