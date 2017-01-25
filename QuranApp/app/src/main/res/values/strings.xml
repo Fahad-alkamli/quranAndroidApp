@@ -9,4 +9,7 @@
     <string name="stop">Stop</string>
     <string name="fastforward">Fastforward</string>
     <string name="pause">Pause</string>
+    <string name="Al_Imran">Al-Imran</string>
+    <string name="An_Nisa">An-Nisa</string>
+    <string name="Al_Maidah">Al-Ma\'idah</string>
 </resources>

@@ -22,6 +22,9 @@ public class CommonFunctions {
         ArrayList<SurahItem> list=new ArrayList<>();
         list.add(new SurahItem(context.getString(R.string.Al_Fatihah),"001"));
         list.add(new SurahItem(context.getString(R.string.Al_Baqarah),"002"));
+        list.add(new SurahItem(context.getString(R.string.Al_Imran),"003"));
+        list.add(new SurahItem(context.getString(R.string.An_Nisa),"004"));
+        list.add(new SurahItem(context.getString(R.string.Al_Maidah),"005"));
        // Log.e(TAG,Integer.toString(list.size()));
         return list;
     }

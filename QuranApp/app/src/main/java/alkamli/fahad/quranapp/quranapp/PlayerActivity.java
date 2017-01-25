@@ -181,7 +181,7 @@ public class PlayerActivity extends AppCompatActivity {
         int count;
         try {
             Looper.prepare();
-            URL url1 = new URL("http://server6.mp3quran.net/thubti/"+file);
+            URL url1 = new URL(getString(R.string.files_url)+file);
           //  Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
             URLConnection conexion = url1.openConnection();
             conexion.connect();
