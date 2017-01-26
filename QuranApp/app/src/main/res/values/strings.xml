@@ -1,15 +1,24 @@
 <resources>
     <string name="app_name">QuranApp</string>
     <string name="files_url">http://server6.mp3quran.net/thubti/</string>
-    <string name="Al_Fatihah">Al-Fatihah</string>
-    <string name="Al_Baqarah">"Al-Baqarah "</string>
-    <string name="Sourah_Title">Sourah Title</string>
+
     <string name="rewind">Rewind</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
-    <string name="fastforward">Fastforward</string>
+    <string name="fastforward">Forward</string>
     <string name="pause">Pause</string>
-    <string name="Al_Imran">Al-Imran</string>
-    <string name="An_Nisa">An-Nisa</string>
-    <string name="Al_Maidah">Al-Ma\'idah</string>
+
+
+    <string name="Al_Fatihah">Sourate Al-Fatihah</string>
+    <string name="Al_Baqarah">"Sourate Al-Baqarah</string>
+    <string name="Sourah_Title">Sourate Sourah Title</string>
+    <string name="Al_Imran">Sourate Al-Imran</string>
+    <string name="An_Nisa">Sourate An-Nisa</string>
+    <string name="Al_Maidah">Sourate Al-Ma\'idah</string>
+
+
+    <string name="download_finish">Download finished</string>
+    <string name="file_does_not_exists">File doesn\'t exists start downloading the file</string>
+    <string name="settings">Settings</string>
+    <string name="replace_the_buttons_icons_with_text">Replace the Buttons icons with Text</string>
 </resources>

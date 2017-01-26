@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +25,7 @@ public class PlayerActivity2 extends AppCompatActivity {
     private final String TAG="Alkamli";
     MediaPlayer mPlayer=null;
     private  static final int FAST_FORWARD_TIME=3000;
+    boolean playerIsVisiable=true;
     String order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,8 @@ public class PlayerActivity2 extends AppCompatActivity {
        // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
         if(!file.exists())
         {
-            Toast.makeText(getApplicationContext(),"File doesn't exists start downloading the file",Toast.LENGTH_LONG).show();
+            playButton.setEnabled(false);
+            Toast.makeText(getApplicationContext(), R.string.file_does_not_exists,Toast.LENGTH_LONG).show();
             new Thread(new Runnable(){
                 @Override
                 public void run()
@@ -77,9 +78,7 @@ public class PlayerActivity2 extends AppCompatActivity {
                     @Override
                     public void onCompletion(MediaPlayer mp)
                     {
-                        //put the play icon since the player finished playing
-                        playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_play_arrow_black_24dp));
-                        playButton.setTag(false);
+                 stop(null);
                     }
                 });
                 try {
@@ -112,7 +111,7 @@ public class PlayerActivity2 extends AppCompatActivity {
             mPlayer.pause();
         }
         //playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_play_arrow_black_24dp));
-        playButton.setText("تشفيل");
+        playButton.setText(getString(R.string.play));
         playButton.setTag(false);
     }
 
@@ -133,7 +132,7 @@ public class PlayerActivity2 extends AppCompatActivity {
             if (mPlayer != null) {
                 mPlayer.stop();
                 // playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_play_arrow_black_24dp));
-                playButton.setText("تشغيل");
+                playButton.setText(getString(R.string.play));
                 playButton.setTag(false);
                 mPlayer.release();
                 mPlayer = null;
@@ -177,6 +176,8 @@ public class PlayerActivity2 extends AppCompatActivity {
         //http://server6.mp3quran.net/thubti/001.mp3
         int count;
         try {
+            //let's stop the button first
+            playButton.setEnabled(false);
             Looper.prepare();
             URL url1 = new URL(getString(R.string.files_url)+file);
            // Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
@@ -195,25 +196,36 @@ public class PlayerActivity2 extends AppCompatActivity {
             output.flush();
             output.close();
             input.close();
-            Toast.makeText(getApplicationContext(),"Download finished",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.download_finish,Toast.LENGTH_LONG).show();
             //Next play the sound
             runOnUiThread(new Runnable(){
                 @Override
                 public void run() {
-                    play();
+                    if(playerIsVisiable)
+                    {
+                        play();
+
+                    }
                 }
             });
         } catch (Exception e)
         {
             Log.e(TAG,e.getMessage());
         }
-
+        //let's enable the button first
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                playButton.setEnabled(true);
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
+             playerIsVisiable=false;
             if(mPlayer!=null)
             {
                 mPlayer.stop();

@@ -1,13 +1,10 @@
 package alkamli.fahad.quranapp.quranapp;
 
-import android.Manifest;
 import android.media.MediaPlayer;
-import android.os.Environment;
+import android.os.Bundle;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +27,7 @@ public class PlayerActivity extends AppCompatActivity {
     private final String TAG="Alkamli";
     MediaPlayer mPlayer=null;
     private  static final int FAST_FORWARD_TIME=3000;
+    boolean playerIsVisiable=true;
     String order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +55,8 @@ public class PlayerActivity extends AppCompatActivity {
        // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
         if(!file.exists())
         {
-            Toast.makeText(getApplicationContext(),"File doesn't exists start downloading the file",Toast.LENGTH_LONG).show();
+            playButton.setEnabled(false);
+            Toast.makeText(getApplicationContext(),R.string.file_does_not_exists,Toast.LENGTH_LONG).show();
             new Thread(new Runnable(){
                 @Override
                 public void run()
@@ -81,9 +80,7 @@ public class PlayerActivity extends AppCompatActivity {
                 @Override
                 public void onCompletion(MediaPlayer mp)
                 {
-                    //put the play icon since the player finished playing
-                    playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_play_arrow_black_24dp));
-                    playButton.setTag(false);
+                    stop(null);
                 }
             });
                 try {
@@ -198,25 +195,37 @@ public class PlayerActivity extends AppCompatActivity {
             output.flush();
             output.close();
             input.close();
-            Toast.makeText(getApplicationContext(),"Download finished",Toast.LENGTH_LONG).show();
-            //Next play the sound
+            Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_LONG).show();
+            //Next play the sound but before that make sure that the user is still on the screen and didn't close it
             runOnUiThread(new Runnable(){
                 @Override
-                public void run() {
-                    play();
+                public void run()
+                {
+                    if(playerIsVisiable)
+                    {
+                        play();
+
+                    }
                 }
             });
         } catch (Exception e)
         {
                 Log.e(TAG,e.getMessage());
         }
-
+        //let's enable the button first
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                playButton.setEnabled(true);
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
+            playerIsVisiable=false;
             if(mPlayer!=null)
             {
                 mPlayer.stop();

@@ -11,7 +11,7 @@
     tools:context="alkamli.fahad.quranapp.quranapp.UserSettingsActivity">
 
     <CheckBox
-        android:text="Replace the Buttons icons with Text"
+        android:text="@string/replace_the_buttons_icons_with_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,4 +19,5 @@
         android:layout_marginStart="16dp"
         android:textSize="15sp"
         android:id="@+id/replaceIconsCheckBox" />
+
 </RelativeLayout>

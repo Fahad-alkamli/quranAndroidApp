@@ -1,4 +1,10 @@
 <resources>
     <string name="pause">ايقاف مؤقت</string>
+    <string name="rewind">اعادة</string>
+    <string name="play">تشغيل</string>
+    <string name="stop">ايقاف</string>
+    <string name="fastforward">تسريع</string>
+
+    <string name="Al_Fatihah">سورة الفاتحة</string>
 
 </resources>
