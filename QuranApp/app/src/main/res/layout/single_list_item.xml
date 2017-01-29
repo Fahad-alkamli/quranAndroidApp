@@ -3,11 +3,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
-        android:text="TextView"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/line" />
+    <TextView
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textSize="25sp"
         android:textColor="@color/colorBlack"
         android:id="@+id/title" />
+
+
 </LinearLayout>

@@ -23,12 +23,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder>{
     private Context context;
     private ArrayList<SurahItem> SourahList=new ArrayList<SurahItem>();
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title;
+        public TextView title,line;
         public View view;
         public MyViewHolder(View view)
         {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
+            line = (TextView) view.findViewById(R.id.line);
              this.view=view;
         }
     }
@@ -55,6 +56,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder>{
         holder.title.setText(sourahTitle);
         holder.view.setTag(sourahTitle);
         holder.view.setClickable(true);
+        //Make sure the first separation line is invisible
+        if(position==0)
+        {
+            holder.line.setVisibility(View.GONE);
+        }else{
+            holder.line.setVisibility(View.VISIBLE);
+        }
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
