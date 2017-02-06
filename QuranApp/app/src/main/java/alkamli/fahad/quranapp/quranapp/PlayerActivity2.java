@@ -54,7 +54,7 @@ public class PlayerActivity2 extends AppCompatActivity {
         if(!file.exists())
         {
             playButton.setEnabled(false);
-            Toast.makeText(getApplicationContext(), R.string.file_does_not_exists,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.file_does_not_exists,Toast.LENGTH_SHORT).show();
             new Thread(new Runnable(){
                 @Override
                 public void run()
@@ -96,7 +96,7 @@ public class PlayerActivity2 extends AppCompatActivity {
         {
             Log.d(TAG,e.getMessage());
         }
-        //Toast.makeText(getApplicationContext(),"Playing",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"Playing",Toast.LENGTH_SHORT).show();
         //playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_pause_black_24dp));
         playButton.setText(R.string.pause);
         playButton.setTag(true);
@@ -196,7 +196,7 @@ public class PlayerActivity2 extends AppCompatActivity {
             output.flush();
             output.close();
             input.close();
-            Toast.makeText(getApplicationContext(), R.string.download_finish,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.download_finish,Toast.LENGTH_SHORT).show();
             //Next play the sound
             runOnUiThread(new Runnable(){
                 @Override

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +55,7 @@ public class PlayerActivity extends AppCompatActivity {
         if(!file.exists())
         {
             playButton.setEnabled(false);
-            Toast.makeText(getApplicationContext(),R.string.file_does_not_exists,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.file_does_not_exists,Toast.LENGTH_SHORT).show();
             new Thread(new Runnable(){
                 @Override
                 public void run()
@@ -98,7 +97,7 @@ public class PlayerActivity extends AppCompatActivity {
         {
             Log.d(TAG,e.getMessage());
         }
-        //Toast.makeText(getApplicationContext(),"Playing",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"Playing",Toast.LENGTH_SHORT).show();
         playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_pause_black_24dp));
         playButton.setTag(true);
     }
@@ -195,7 +194,7 @@ public class PlayerActivity extends AppCompatActivity {
             output.flush();
             output.close();
             input.close();
-            Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
             //Next play the sound but before that make sure that the user is still on the screen and didn't close it
             runOnUiThread(new Runnable(){
                 @Override
