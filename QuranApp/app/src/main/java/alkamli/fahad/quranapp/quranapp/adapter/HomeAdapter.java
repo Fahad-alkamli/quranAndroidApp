@@ -67,7 +67,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder>{
             @Override
             public void onClick(View view) {
                 String title=((String) view.getTag());
-                Toast.makeText(context,((String) view.getTag()),Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,((String) view.getTag()),Toast.LENGTH_LONG).show();
                 Intent i;
                 if(CommonFunctions.getSharedPreferences(context).getBoolean("textButtons",false))
                 {

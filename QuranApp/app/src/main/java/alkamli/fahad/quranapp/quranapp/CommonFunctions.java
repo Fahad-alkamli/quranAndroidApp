@@ -3,6 +3,8 @@ package alkamli.fahad.quranapp.quranapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -157,5 +159,23 @@ public class CommonFunctions {
 
         return context.getSharedPreferences(context.getString(R.string.app_name),MODE_PRIVATE);
     }
+
+
+
+    public static boolean isNetworkAvailable(Context context)
+    {
+        try {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if (activeNetworkInfo != null) {
+                return activeNetworkInfo.isConnected();
+            }
+        }catch(Exception e)
+        {
+            class Local {}; Log.e(CommonFunctions.TAG,("MethodName: "+Local.class.getEnclosingMethod().getName()+" || ErrorMessage: "+e.getMessage()));
+        }
+        return false;
+    }
+
 
 }

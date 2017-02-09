@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedInputStream;
@@ -22,6 +23,7 @@ import java.net.URLConnection;
 public class PlayerActivity2 extends AppCompatActivity {
     TextView titleTextview;
     Button playButton;
+    ProgressBar progressBar;
     private final String TAG="Alkamli";
     MediaPlayer mPlayer=null;
     private  static final int FAST_FORWARD_TIME=3000;
@@ -30,7 +32,6 @@ public class PlayerActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player2);
         String title= getIntent().getStringExtra("title");
         order=getIntent().getStringExtra("order");
         if(title==null || order==null)
@@ -38,37 +39,43 @@ public class PlayerActivity2 extends AppCompatActivity {
             finish();
             return;
         }
+        order=order+".mp3";
+        setContentView(R.layout.activity_player2);
+        //show the content and disable the progress bar
+        findViewById(R.id.progressBarContainer).setVisibility(View.GONE);
+        progressBar=(ProgressBar)  findViewById(R.id.progressBar);
         titleTextview=(TextView) findViewById(R.id.title);
         titleTextview.setText(title);
         playButton=(Button) findViewById(R.id.playButton);
         //Play the sound on the first open
+
         play();
     }
 
-
     private void play()
     {
-        //If the file doesn't exists start downloading the file from the server and play it as soon as possible
-        File file= new File(getApplicationInfo().dataDir+"/"+order+".mp3");
-       // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
-        if(!file.exists())
-        {
-            playButton.setEnabled(false);
-            Toast.makeText(getApplicationContext(), R.string.file_does_not_exists,Toast.LENGTH_SHORT).show();
-            new Thread(new Runnable(){
-                @Override
-                public void run()
-                {
-                   // Log.e(TAG,"File doesn't exists start downloading the file");
-                    //Download the file
-                    downloadFile(order+".mp3");
-                }
-            }).start();
-
-            return;
-        }
         //play
         try {
+            //If the file doesn't exists start downloading the file from the server and play it as soon as possible
+            File file= new File(getApplicationInfo().dataDir+"/"+order);
+            // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
+            if(!file.exists())
+            {
+                playButton.setEnabled(false);
+               // Toast.makeText(getApplicationContext(), R.string.file_does_not_exists,Toast.LENGTH_SHORT).show();
+                new Thread(new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        // Log.e(TAG,"File doesn't exists start downloading the file");
+                        //Download the file
+                        downloadFile(order);
+                    }
+                }).start();
+
+                return;
+            }
+
             if (mPlayer ==null)
             {
                 mPlayer = new MediaPlayer();
@@ -78,11 +85,11 @@ public class PlayerActivity2 extends AppCompatActivity {
                     @Override
                     public void onCompletion(MediaPlayer mp)
                     {
-                 stop(null);
+                        stop(null);
                     }
                 });
                 try {
-                    mPlayer.setDataSource(getApplicationInfo().dataDir+"/"+order+".mp3");
+                    mPlayer.setDataSource(getApplicationInfo().dataDir+"/"+order);
                     mPlayer.prepare();
                     mPlayer.start();
                     Log.d(TAG,"playing .");
@@ -104,27 +111,34 @@ public class PlayerActivity2 extends AppCompatActivity {
 
     private void pause()
     {
-        //Pause because it's already playing
-        //Change the icon
-        if(mPlayer!= null && mPlayer.isPlaying())
-        {
-            mPlayer.pause();
+        try {
+            //Pause because it's already playing
+            //Change the icon
+            if(mPlayer!= null && mPlayer.isPlaying())
+            {
+                mPlayer.pause();
+            }
+            //playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_play_arrow_black_24dp));
+            playButton.setText(getString(R.string.play));
+            playButton.setTag(false);
+        } catch (Exception e) {
+            Log.e(TAG,e.getMessage());
         }
-        //playButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.mipmap.ic_play_arrow_black_24dp));
-        playButton.setText(getString(R.string.play));
-        playButton.setTag(false);
     }
 
     public void playOrPause(View view)
     {
-        if(((Boolean)playButton.getTag()))
-        {
-            pause();
-        }else{
-            play();
+        try {
+            if(playButton.getTag()!= null && ((Boolean)playButton.getTag()))
+            {
+                pause();
+            }else{
+                play();
+            }
+        } catch (Exception e) {
+            Log.e(TAG,e.getMessage());
         }
     }
-
 
     public void stop(View view)
     {
@@ -141,33 +155,43 @@ public class PlayerActivity2 extends AppCompatActivity {
             Log.e(TAG,e.getMessage());
         }
     }
+
     public void fastforward(View view)
     {
 
-        if(mPlayer!= null)
-        {
-            if(mPlayer.getDuration()>mPlayer.getCurrentPosition()+FAST_FORWARD_TIME)
+        try {
+            if(mPlayer!= null)
             {
-                mPlayer.seekTo(mPlayer.getCurrentPosition()+FAST_FORWARD_TIME);
-            }else
-            {
-                // go the end
-                mPlayer.seekTo(mPlayer.getDuration());
+                if(mPlayer.getDuration()>mPlayer.getCurrentPosition()+FAST_FORWARD_TIME)
+                {
+                    mPlayer.seekTo(mPlayer.getCurrentPosition()+FAST_FORWARD_TIME);
+                }else
+                {
+                    // go the end
+                    mPlayer.seekTo(mPlayer.getDuration());
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG,e.getMessage());
         }
     }
+
     public void rewind(View view)
     {
-        if(mPlayer!= null)
-        {
-            if(mPlayer.getDuration()>mPlayer.getCurrentPosition()-FAST_FORWARD_TIME)
+        try {
+            if(mPlayer!= null)
             {
-                mPlayer.seekTo(mPlayer.getCurrentPosition()-FAST_FORWARD_TIME);
-            }else{
-                //rewind From the start
-                mPlayer.seekTo(0);
-            }
+                if(mPlayer.getDuration()>mPlayer.getCurrentPosition()-FAST_FORWARD_TIME)
+                {
+                    mPlayer.seekTo(mPlayer.getCurrentPosition()-FAST_FORWARD_TIME);
+                }else{
+                    //rewind From the start
+                    mPlayer.seekTo(0);
+                }
 
+            }
+        } catch (Exception e) {
+            Log.e(TAG,e.getMessage());
         }
 
     }
@@ -176,56 +200,161 @@ public class PlayerActivity2 extends AppCompatActivity {
         //http://server6.mp3quran.net/thubti/001.mp3
         int count;
         try {
-            //let's stop the button first
-            playButton.setEnabled(false);
+            //Check for available internet connection first
+            if(!CommonFunctions.isNetworkAvailable(getApplicationContext()))
+            {
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),R.string.internet_connection_error,Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+            }
+
+            //let's check for internet connection first
+
+            //Hide the content and show the progress bar
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    findViewById(R.id.progressBarContainer).setVisibility(View.VISIBLE);
+                }
+            });
             Looper.prepare();
             URL url1 = new URL(getString(R.string.files_url)+file);
-           // Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
+            //  Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
             URLConnection conexion = url1.openConnection();
             conexion.connect();
-            int lenghtOfFile = conexion.getContentLength();
+            final int lenghtOfFile = conexion.getContentLength();
+            if(lenghtOfFile!=-1 && lenghtOfFile>0)
+            {
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        progressBar.setMax(lenghtOfFile);
+                    }
+                });
+            }
             InputStream input = new BufferedInputStream(url1.openStream());
             OutputStream output = new FileOutputStream(getApplicationInfo().dataDir+"/"+file);
             byte data[] = new byte[1024];
             long total = 0;
             System.out.println("downloading.............");
-            while ((count = input.read(data)) != -1) {
+            Log.e(TAG,"File Total length: "+lenghtOfFile);
+            while (CommonFunctions.isNetworkAvailable(getApplicationContext()) && (count = input.read(data)) != -1)
+            {
                 total += count;
                 output.write(data, 0, count);
+                final long  temp=total;
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        progressBar.setProgress(((int)temp));
+                    }
+                });
             }
+            Log.e(TAG,"Done");
             output.flush();
             output.close();
             input.close();
-            Toast.makeText(getApplicationContext(), R.string.download_finish,Toast.LENGTH_SHORT).show();
-            //Next play the sound
+            //Here i will try to find the file and check it's size to make sure it's not corrupt
+            //I can check the size only if the server respond with the expected size
+            if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file))
+            {
+                Log.e(TAG,"File is corrupt , deleting the file");
+                //Delete the file
+                File file2=new File(getApplicationInfo().dataDir+"/"+file);
+                if(file2.exists())
+                {
+                    file2.delete();
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), R.string.file_is_corrupt,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    finish();
+                    return;
+                }
+            }
+            Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
+            //Next play the sound but before that make sure that the user is still on the screen and didn't close it
             runOnUiThread(new Runnable(){
                 @Override
-                public void run() {
+                public void run()
+                {
                     if(playerIsVisiable)
                     {
                         play();
-
                     }
                 }
             });
         } catch (Exception e)
         {
+            try {
+                //If there was an error just delete the file
+                //Delete the file
+                File file2=new File(getApplicationInfo().dataDir+"/"+file);
+                if(file2.exists())
+                {
+                    file2.delete();
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), R.string.file_is_corrupt,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            } catch (Exception e1) {
+                Log.e(TAG,e1.getMessage());
+            }
             Log.e(TAG,e.getMessage());
+
+            finish();
+            //What if there was a problem how are we going to handle this?
         }
         //let's enable the button first
         runOnUiThread(new Runnable(){
             @Override
             public void run() {
                 playButton.setEnabled(true);
+                //show the content and disable the progress bar
+                findViewById(R.id.progressBarContainer).setVisibility(View.GONE);
             }
         });
+    }
+
+
+    private boolean validateFileSize(long expectedSize,String fileName)
+    {
+        try{
+            //Here i will try to find the file and check it's size to make sure it's not corrupt
+            File file2=new File(getApplicationInfo().dataDir+"/"+fileName);
+            if(file2.exists())
+            {
+                // Log.e(TAG,"Written file length: "+file2.length());
+
+                if(file2.length()==expectedSize)
+                {
+                    return true;
+                }
+            }
+
+
+        }catch(Exception e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+        return false;
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
-             playerIsVisiable=false;
+            playerIsVisiable=false;
             if(mPlayer!=null)
             {
                 mPlayer.stop();
@@ -236,5 +365,12 @@ public class PlayerActivity2 extends AppCompatActivity {
             Log.e(TAG,e.getMessage());
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        playerIsVisiable=false;
+    }
+
 }
 
