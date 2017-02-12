@@ -2,7 +2,9 @@ package alkamli.fahad.quranapp.quranapp;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
+import android.os.StatFs;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -229,6 +231,19 @@ public class PlayerActivity extends AppCompatActivity {
             final int lenghtOfFile = conexion.getContentLength();
             if(lenghtOfFile!=-1 && lenghtOfFile>0)
             {
+                if(getFreeSpace()<lenghtOfFile)
+                {
+                    //Notify the user that the free space is not enough for the file
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), R.string.not_enough_space,Toast.LENGTH_LONG).show();
+                            finish();
+
+                        }
+                    });
+                    return;
+                }
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
@@ -354,6 +369,37 @@ public class PlayerActivity extends AppCompatActivity {
         return false;
 
     }
+
+
+    /**
+     * This function find outs the free space for the given path.
+     *http://stackoverflow.com/questions/16076122/android-how-to-handle-saving-file-on-low-device-memoryinternal-external-memor
+     * @return Bytes. Number of free space in bytes.
+     */
+    public static long getFreeSpace()
+    {
+        try
+        {
+            if (Environment.getExternalStorageDirectory() != null
+                    && Environment.getExternalStorageDirectory().getPath() != null)
+            {
+                StatFs m_stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+                long m_blockSize = m_stat.getBlockSizeLong();
+                long m_availableBlocks = m_stat.getAvailableBlocksLong();
+                return (m_availableBlocks * m_blockSize);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

@@ -131,4 +131,5 @@
     <string name="downloading">Downloading......</string>
     <string name="internet_connection_error">Error: Internet connection is not available</string>
     <string name="file_is_corrupt">Error:File is corrupt, please try again.</string>
+    <string name="not_enough_space">Error:Not Enough Storage Space Available.</string>
 </resources>
