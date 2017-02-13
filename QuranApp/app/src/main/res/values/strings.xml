@@ -132,4 +132,6 @@
     <string name="internet_connection_error">Error: Internet connection is not available</string>
     <string name="file_is_corrupt">Error:File is corrupt, please try again.</string>
     <string name="not_enough_space">Error:Not Enough Storage Space Available.</string>
+    <string name="delete_files_after_playing_theme">Delete files after playing theme.</string>
+    <string name="please_wait_for_file_to_finish_downloading">Error: Please wait for file/s to finish downloading.</string>
 </resources>

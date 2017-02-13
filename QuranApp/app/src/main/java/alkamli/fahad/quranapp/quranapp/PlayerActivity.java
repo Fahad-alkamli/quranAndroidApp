@@ -35,6 +35,7 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG,"OnCreate");
        String title= getIntent().getStringExtra("title");
         order=getIntent().getStringExtra("order");
         if(title==null || order==null)
@@ -50,10 +51,11 @@ public class PlayerActivity extends AppCompatActivity {
         titleTextview=(TextView) findViewById(R.id.title);
         titleTextview.setText(title);
         playButton=(Button) findViewById(R.id.playButton);
-
+        playerIsVisiable=true;
         //Play the sound on the first open
         play();
     }
+
 
 
     private void play()
@@ -79,7 +81,13 @@ public class PlayerActivity extends AppCompatActivity {
 
             return;
         }
+            //If file is being downloaded
+           /* if( fileIsBeingDownloaded)
+            {
+                Toast.makeText(this, R.string.please_wait_for_file_to_finish_downloading,Toast.LENGTH_SHORT).show();
 
+                return;
+            }*/
            if (mPlayer ==null)
             {
                 mPlayer = new MediaPlayer();
@@ -252,10 +260,12 @@ public class PlayerActivity extends AppCompatActivity {
                 });
             }
             InputStream input = new BufferedInputStream(url1.openStream());
-            OutputStream output = new FileOutputStream(getApplicationInfo().dataDir+"/"+file);
+            FileOutputStream output = new FileOutputStream(getApplicationInfo().dataDir+"/"+file);
+            java.nio.channels.FileLock lock = output.getChannel().lock();
             byte data[] = new byte[1024];
             long total = 0;
             System.out.println("downloading.............");
+
             Log.e(TAG,"File Total length: "+lenghtOfFile);
             while (CommonFunctions.isNetworkAvailable(getApplicationContext()) && (count = input.read(data)) != -1)
             {
@@ -265,14 +275,25 @@ public class PlayerActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
-                        progressBar.setProgress(((int)temp));
+                        if(progressBar != null)
+                        {
+                            progressBar.setMax(lenghtOfFile);
+                            progressBar.setProgress(((int) temp));
+                        }else{
+                            Log.e(TAG,"progressBar != null");
+                        }
+
                     }
                 });
+                //Log.d(TAG,Long.toString(temp));
             }
            Log.e(TAG,"Done");
             output.flush();
+            //Release the lock on the file so others can use it
+            lock.release();
             output.close();
             input.close();
+
             //Here i will try to find the file and check it's size to make sure it's not corrupt
             //I can check the size only if the server respond with the expected size
             if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file))
@@ -290,18 +311,26 @@ public class PlayerActivity extends AppCompatActivity {
                         }
                     });
                     finish();
+
                     return;
                 }
+            }else{
+                Log.e(TAG,"File has been downloaded secessfuly");
+
             }
-            Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
+
             //Next play the sound but before that make sure that the user is still on the screen and didn't close it
             runOnUiThread(new Runnable(){
                 @Override
                 public void run()
                 {
+                    Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
                     if(playerIsVisiable)
                     {
+                        Log.e(TAG,"playerIsVisiable");
                         play();
+                    }else{
+                        Log.e(TAG,"playerIsVisiable==false");
                     }
                 }
             });
@@ -324,8 +353,9 @@ public class PlayerActivity extends AppCompatActivity {
             } catch (Exception e1) {
                 Log.e(TAG,e1.getMessage());
             }
-            Log.e(TAG,e.getMessage());
+//            Log.e(TAG,e.getMessage());
 
+            e.printStackTrace();
             finish();
             //What if there was a problem how are we going to handle this?
         }
@@ -338,6 +368,9 @@ public class PlayerActivity extends AppCompatActivity {
                 findViewById(R.id.progressBarContainer).setVisibility(View.GONE);
             }
         });
+
+        //Done
+
     }
 
     @Override
@@ -399,6 +432,7 @@ public class PlayerActivity extends AppCompatActivity {
             return 0;
         }
     }
+
 
 
     @Override

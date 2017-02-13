@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import alkamli.fahad.quranapp.quranapp.entity.SurahItem;
@@ -177,5 +178,27 @@ public class CommonFunctions {
         return false;
     }
 
+
+    public static void checkForDeleteFilesOption(Context context)
+    {
+        try {
+            //Delete all the files if this option has been selected
+            if (CommonFunctions.getSharedPreferences(context).getBoolean("deleteFilesAfterPlaying", false)) {
+                //Delete all the files if they exists
+                //http://stackoverflow.com/questions/13195797/delete-all-files-in-directory-but-not-directory-one-liner-solution
+                for (File file : new java.io.File(context.getApplicationInfo().dataDir).listFiles())
+                {
+                    if (!file.isDirectory() && file.getName().contains(".mp3"))
+                    {
+                        Log.e(TAG, file.getName());
+                        file.delete();
+                    }
+                }
+            }
+        }catch(Exception e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+    }
 
 }

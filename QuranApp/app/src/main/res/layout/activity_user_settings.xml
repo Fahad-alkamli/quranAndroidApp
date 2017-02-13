@@ -20,4 +20,13 @@
         android:textSize="15sp"
         android:id="@+id/replaceIconsCheckBox" />
 
+    <CheckBox
+        android:text="@string/delete_files_after_playing_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/replaceIconsCheckBox"
+        android:layout_alignStart="@+id/replaceIconsCheckBox"
+        android:layout_marginTop="15dp"
+        android:id="@+id/deleteFilesCheckBox" />
+
 </RelativeLayout>

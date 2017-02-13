@@ -9,4 +9,9 @@
         android:title="@string/settings"
         />
 
+    <item
+        app:showAsAction="always"
+        android:title="Download All"
+        android:id="@+id/downloadAll"
+        />
 </menu>

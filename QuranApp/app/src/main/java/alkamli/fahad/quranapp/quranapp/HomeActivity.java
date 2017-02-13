@@ -23,6 +23,14 @@ public class HomeActivity extends AppCompatActivity {
         list=(RecyclerView) findViewById(R.id.list);
         list.setAdapter(new HomeAdapter(this, CommonFunctions.getSourahList(this)));
         list.setLayoutManager(new LinearLayoutManager(this));
+        //Delete files if the option has been selected
+        new Thread(new Runnable(){
+            @Override
+            public void run()
+            {
+                CommonFunctions.checkForDeleteFilesOption(getApplicationContext());
+            }
+        }).start();
     }
 
     @Override
@@ -49,6 +57,11 @@ public class HomeActivity extends AppCompatActivity {
                     //overridePendingTransition(R.anim.fadeout, R.anim.fadein);
                     return true;
                 }
+                case R.id.downloadAll:
+                {
+
+                    return true;
+                }
 
             }
         }catch(Exception e)
@@ -61,5 +74,20 @@ public class HomeActivity extends AppCompatActivity {
         return false;
     }
 
+    private void downloadAllFiles()
+    {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new Thread(new Runnable(){
+            @Override
+            public void run()
+            {
+                CommonFunctions.checkForDeleteFilesOption(getApplicationContext());
+            }
+        }).start();
+    }
 }

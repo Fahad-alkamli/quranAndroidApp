@@ -251,10 +251,9 @@ public class PlayerActivity2 extends AppCompatActivity {
                     }
                 });
             }
-
             InputStream input = new BufferedInputStream(url1.openStream());
-            OutputStream output = new FileOutputStream(getApplicationInfo().dataDir+"/"+file);
-
+            FileOutputStream output = new FileOutputStream(getApplicationInfo().dataDir+"/"+file);
+            java.nio.channels.FileLock lock = output.getChannel().lock();
             byte data[] = new byte[1024];
             long total = 0;
             System.out.println("downloading.............");
@@ -273,8 +272,12 @@ public class PlayerActivity2 extends AppCompatActivity {
             }
             Log.e(TAG,"Done");
             output.flush();
+            //Release the lock on the file so others can use it
+            lock.release();
             output.close();
             input.close();
+            //Release the lock on the file so others can use it
+            lock.release();
             //Here i will try to find the file and check it's size to make sure it's not corrupt
             //I can check the size only if the server respond with the expected size
             if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file))
@@ -294,6 +297,8 @@ public class PlayerActivity2 extends AppCompatActivity {
                     finish();
                     return;
                 }
+            }else{
+
             }
             Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
             //Next play the sound but before that make sure that the user is still on the screen and didn't close it
@@ -341,7 +346,6 @@ public class PlayerActivity2 extends AppCompatActivity {
             }
         });
     }
-
 
     private boolean validateFileSize(long expectedSize,String fileName)
     {
