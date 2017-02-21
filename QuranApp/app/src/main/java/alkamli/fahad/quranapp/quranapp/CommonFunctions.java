@@ -19,6 +19,32 @@ public class CommonFunctions {
 
 
     public static final String TAG="Alkamli";
+    private static final ArrayList<String> QUEUEArrayList=new ArrayList<String>()
+    {
+        @Override
+        public boolean contains(Object o) {
+            try{
+                String value=(String) o;
+                boolean found=false;
+                for(String temp:getQueue())
+                {
+                    if(temp.equals(value))
+                    {
+                        found=true;
+                        break;
+                    }
+                }
+                if(found)
+                {
+                    return true;
+                }
+            }catch(Exception e)
+            {
+                Log.e(TAG,e.getMessage());
+            }
+            return false;
+        }
+    };
 
     public static ArrayList<SurahItem> getSourahList(Context context)
     {
@@ -199,6 +225,36 @@ public class CommonFunctions {
         {
             Log.e(TAG,e.getMessage());
         }
+    }
+
+
+    public static synchronized ArrayList<String> getQueue()
+    {
+        return QUEUEArrayList;
+    }
+
+    public static synchronized void putInQueue(String argument)
+    {
+        try{
+           if(getQueue().contains(argument))
+           {
+               return;
+           }else{
+               getQueue().add(argument);
+           }
+        }catch(Exception e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+    }
+
+    public static synchronized  void removeFromQueue(String arg)
+    {
+        if(getQueue().contains(arg))
+        {
+            getQueue().remove(arg);
+        }
+
     }
 
 }
