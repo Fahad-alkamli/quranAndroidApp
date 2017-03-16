@@ -134,4 +134,7 @@
     <string name="not_enough_space">Error:Not Enough Storage Space Available.</string>
     <string name="delete_files_after_playing_theme">Delete files after playing theme.</string>
     <string name="please_wait_for_file_to_finish_downloading">Error: Please wait for file/s to finish downloading.</string>
+    <string name="cancel_the_download">Cancel The Download</string>
+    <string name="cancel_all_downloads">Cancel All</string>
+    <string name="download_all">Download All</string>
 </resources>

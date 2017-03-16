@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-
     >
+    <item
+        app:showAsAction="always"
+        android:title="@string/cancel_all_downloads"
+        android:id="@+id/cancelAll"
+        />
     <item
         android:id="@+id/settings"
         app:showAsAction="collapseActionView"
         android:title="@string/settings"
-        />
-
-    <item
-        app:showAsAction="always"
-        android:title="@string/download_all"
-        android:id="@+id/downloadAll"
         />
 </menu>

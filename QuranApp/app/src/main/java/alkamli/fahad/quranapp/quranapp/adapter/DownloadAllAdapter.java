@@ -9,9 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +40,8 @@ import static alkamli.fahad.quranapp.quranapp.CommonFunctions.validateFileSize;
 
 public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter.MyViewHolder>{
 
-     private static ArrayList<SurahItem> SourahList;
+    private ArrayList<SurahItem> SourahList;
+    public static boolean StopALL=false;
     private Activity activity;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
@@ -58,6 +61,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
     public DownloadAllAdapter(Activity activity,ArrayList<SurahItem> SourahList) {
         this.SourahList=SourahList;
         this.activity=activity;
+        StopALL=false;
     }
 
     @Override
@@ -85,16 +89,32 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
         holder.view.setClickable(true);
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 //Show an option to pause or cancel the download
                 //change the view tag state
-                SurahItem file=(SurahItem) view.getTag();
-                if(file.isDownloadState())
+                if(holder.progressBar.getTag()!= null &&((Boolean)holder.progressBar.getTag())==true)
                 {
-                    file.setDownloadState(false);
-                }else{
-                    file.setDownloadState(true);
+                    return;
                 }
+                PopupMenu popupMenu = new PopupMenu(activity, holder.title);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                                         @Override
+                                                         public boolean onMenuItemClick(MenuItem menuItem) {
+                                                             switch (menuItem.getItemId())
+                                                             {
+                                                                 case R.id.cancelDownload:
+                                                                     {
+                                                                         SurahItem file=(SurahItem) view.getTag();
+                                                                             file.setDownloadState(false);
+                                                                     }
+                                                             }
+                                                             return false;
+                                                         }
+                                                     });
+
+                popupMenu.inflate(R.menu.cancel_download_popup_menu);
+                popupMenu.show();
+
 
             }
         });
@@ -157,6 +177,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
 
                                 progressBar.setMax(100);
                                 progressBar.setProgress(100);
+                            progressBar.setTag(true);
 
 
                         }
@@ -202,6 +223,14 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             System.out.println("downloading.............");
 
             Log.e(TAG, "File Total length: " + lenghtOfFile);
+            //We initiate the progress bar tag by false indicating that this file has not finished yet
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setTag(false);
+
+                }
+            });
             while (CommonFunctions.isNetworkAvailable(activity.getApplicationContext()) && (count = input.read(data)) != -1)
             {
                 total += count;
@@ -223,41 +252,31 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 }
                 //Log.d(TAG,Long.toString(temp));
                 //Here we will detect if the user has clicked on pause on the download
-                    synchronized (this)
+
+
+                if(!item.isDownloadState() || StopALL)
+                {
+                //we cancel the download
+                    Log.e(TAG,"Download has been Canceled");
+                try{
                     {
-                        int countPauses=0;
-                        while(!item.isDownloadState())
-                        //we pause
-                        try{
-                            countPauses+=1;
-                            Log.d(TAG,"we pause");
-                            wait(10000);
-                            if(countPauses==3)
-                            {
-                                File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
-                                if (file2.exists())
-                                {
-                                    file2.delete();
-                                    activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(activity.getApplicationContext(), R.string.file_is_corrupt, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    // activity.finish();
-                                }
-
-                                CommonFunctions.removeFromQueue(file);
-                                return;
-                            }
-
-                        }catch(Exception e)
+                        File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
+                        if (file2.exists())
                         {
-                            Log.e(TAG,e.getMessage());
+                            file2.delete();
                         }
+                        CommonFunctions.removeFromQueue(file);
+                        return;
                     }
 
+                    }catch(Exception e)
+                    {
+                        Log.e(TAG,e.getMessage());
+                    }
+                }
+
             }
+
             Log.e(TAG, "Done");
             output.flush();
             //Release the lock on the file so others can use it
@@ -285,8 +304,19 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 }
             } else {
                 Log.e(TAG, "File has been downloaded secessfuly");
+                //We declare this download as completed
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setMax(100);
+                        progressBar.incrementProgressBy(100);
+                        progressBar.setTag(true);
+
+                    }
+                });
 
             }
+
 
         }catch(Exception e)
         {
