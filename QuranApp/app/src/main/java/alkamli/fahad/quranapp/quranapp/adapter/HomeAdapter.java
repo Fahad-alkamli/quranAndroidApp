@@ -88,4 +88,5 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder>{
     public int getItemCount() {
         return SourahList.size();
     }
+
 }

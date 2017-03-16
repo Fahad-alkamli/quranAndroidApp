@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 
 import java.io.File;
@@ -257,4 +259,55 @@ public class CommonFunctions {
 
     }
 
+    public static boolean validateFileSize(long expectedSize,String fileName,Context context)
+    {
+        try{
+            //Here i will try to find the file and check it's size to make sure it's not corrupt
+            File file2=new File(context.getApplicationInfo().dataDir+"/"+fileName);
+            if(file2.exists())
+            {
+                Log.e(TAG,"Written file length: "+file2.length());
+                Log.e(TAG,"ExpectedSize to be:"+expectedSize);
+                if(file2.length()==expectedSize)
+                {
+                    return true;
+                }
+            }
+
+        }catch(Exception e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+        return false;
+
+    }
+
+    /**
+     * This function find outs the free space for the given path.
+     *http://stackoverflow.com/questions/16076122/android-how-to-handle-saving-file-on-low-device-memoryinternal-external-memor
+     * @return Bytes. Number of free space in bytes.
+     */
+    public static long getFreeSpace()
+    {
+        try
+        {
+            if (Environment.getExternalStorageDirectory() != null
+                    && Environment.getExternalStorageDirectory().getPath() != null)
+            {
+                StatFs m_stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+                long m_blockSize = m_stat.getBlockSizeLong();
+                long m_availableBlocks = m_stat.getAvailableBlocksLong();
+                return (m_availableBlocks * m_blockSize);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

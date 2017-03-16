@@ -59,7 +59,8 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 case R.id.downloadAll:
                 {
-
+                    Intent i=new Intent(getApplicationContext(),DownloadAllQuranActivity.class);
+                    startActivity(i);
                     return true;
                 }
 

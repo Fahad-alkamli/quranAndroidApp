@@ -4,6 +4,7 @@ package alkamli.fahad.quranapp.quranapp.entity;
 public class SurahItem {
     private String title;
     private String order;
+    private boolean downloadState=true;
 
     public SurahItem(String title, String order) {
         this.title = title;
@@ -24,5 +25,13 @@ public class SurahItem {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public boolean isDownloadState() {
+        return downloadState;
+    }
+
+    public void setDownloadState(boolean downloadState) {
+        this.downloadState = downloadState;
     }
 }

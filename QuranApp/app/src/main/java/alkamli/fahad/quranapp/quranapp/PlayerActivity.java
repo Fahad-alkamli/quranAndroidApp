@@ -2,9 +2,7 @@ package alkamli.fahad.quranapp.quranapp;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
-import android.os.StatFs;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -74,7 +71,7 @@ public class PlayerActivity extends AppCompatActivity {
         //If the file doesn't exists start downloading the file from the server and play it as soon as possible
         File file= new File(getApplicationInfo().dataDir+"/"+order2);
        // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
-        if(!file.exists())
+        if(!file.exists() && CommonFunctions.getQueue().contains(order2)==false)
         {
             playButton.setEnabled(false);
          //   Toast.makeText(getApplicationContext(),R.string.file_does_not_exists,Toast.LENGTH_SHORT).show();
@@ -265,7 +262,7 @@ public class PlayerActivity extends AppCompatActivity {
             CommonFunctions.putInQueue(file);
             if(lenghtOfFile!=-1 && lenghtOfFile>0)
             {
-                if(getFreeSpace()<lenghtOfFile)
+                if(CommonFunctions.getFreeSpace()<lenghtOfFile)
                 {
                     //Notify the user that the free space is not enough for the file
                     runOnUiThread(new Runnable(){
@@ -322,7 +319,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             //Here i will try to find the file and check it's size to make sure it's not corrupt
             //I can check the size only if the server respond with the expected size
-            if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file))
+            if(lenghtOfFile !=-1 && !CommonFunctions.validateFileSize(lenghtOfFile,file,getApplicationContext()))
             {
                 Log.e(TAG,"File is corrupt , deleting the file");
                 //Delete the file
@@ -403,59 +400,6 @@ public class PlayerActivity extends AppCompatActivity {
 
         //Done
 
-    }
-
-    private boolean validateFileSize(long expectedSize,String fileName)
-    {
-        try{
-            //Here i will try to find the file and check it's size to make sure it's not corrupt
-            File file2=new File(getApplicationInfo().dataDir+"/"+fileName);
-            if(file2.exists())
-            {
-                Log.e(TAG,"Written file length: "+file2.length());
-                Log.e(TAG,"ExpectedSize to be:"+expectedSize);
-                if(file2.length()==expectedSize)
-                {
-                    return true;
-                }
-            }
-
-
-        }catch(Exception e)
-        {
-            Log.e(TAG,e.getMessage());
-        }
-        return false;
-
-    }
-
-    /**
-     * This function find outs the free space for the given path.
-     *http://stackoverflow.com/questions/16076122/android-how-to-handle-saving-file-on-low-device-memoryinternal-external-memor
-     * @return Bytes. Number of free space in bytes.
-     */
-    public static long getFreeSpace()
-    {
-        try
-        {
-            if (Environment.getExternalStorageDirectory() != null
-                    && Environment.getExternalStorageDirectory().getPath() != null)
-            {
-                StatFs m_stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-                long m_blockSize = m_stat.getBlockSizeLong();
-                long m_availableBlocks = m_stat.getAvailableBlocksLong();
-                return (m_availableBlocks * m_blockSize);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
     }
 
     @Override

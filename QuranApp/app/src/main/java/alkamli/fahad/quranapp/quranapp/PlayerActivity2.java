@@ -70,7 +70,7 @@ public class PlayerActivity2 extends AppCompatActivity {
             //If the file doesn't exists start downloading the file from the server and play it as soon as possible
             File file= new File(getApplicationInfo().dataDir+"/"+order2);
             // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
-            if(!file.exists())
+            if(!file.exists()&& CommonFunctions.getQueue().contains(order2)==false)
             {
                 playButton.setEnabled(false);
                 //   Toast.makeText(getApplicationContext(),R.string.file_does_not_exists,Toast.LENGTH_SHORT).show();
