@@ -114,8 +114,6 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
 
                 popupMenu.inflate(R.menu.cancel_download_popup_menu);
                 popupMenu.show();
-
-
             }
         });
 
@@ -167,8 +165,9 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             {
                 File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
                 // Log.e(TAG,getApplicationInfo().dataDir+"/"+order+".mp3");
-                //The file already exists then we should change the progress to 100%
-                if (file2.exists()) {
+                //The file already exists then we should change the progress to 100% , exists but not in the queue
+                if (file2.exists())
+                {
                     if (progressBar != null)
                     {
                     activity.runOnUiThread(new Runnable() {
@@ -177,9 +176,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
 
                                 progressBar.setMax(100);
                                 progressBar.setProgress(100);
-                            progressBar.setTag(true);
-
-
+                                progressBar.setTag(true);
                         }
                     });
                     }
@@ -192,6 +189,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             URLConnection conexion = url1.openConnection();
             conexion.connect();
             final int lenghtOfFile = conexion.getContentLength();
+            //Make sure we have enough space to download the file otherwise notify the user and cancel the download
             if (lenghtOfFile != -1 && lenghtOfFile > 0)
             {
                 if (getFreeSpace() < lenghtOfFile) {
@@ -213,7 +211,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                     }
                 });
             }
-            //put the file in the queue
+            //put the file in the queue so we can start the download process
             CommonFunctions.putInQueue(file);
             InputStream input = new BufferedInputStream(url1.openStream());
             FileOutputStream output = new FileOutputStream(activity.getApplicationInfo().dataDir + "/" + file);
@@ -248,15 +246,13 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                             }
                         });
                     }
-
                 }
                 //Log.d(TAG,Long.toString(temp));
                 //Here we will detect if the user has clicked on pause on the download
 
-
+                //we cancel the download if the cancel all button has been clicked or the user has canceled a download .
                 if(!item.isDownloadState() || StopALL)
                 {
-                //we cancel the download
                     Log.e(TAG,"Download has been Canceled");
                 try{
                     {
@@ -266,6 +262,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                             file2.delete();
                         }
                         CommonFunctions.removeFromQueue(file);
+                        progressBar.setTag(true);
                         return;
                     }
 
@@ -284,8 +281,8 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             output.close();
             input.close();
 
-            //Here i will try to find the file and check it's size to make sure it's not corrupt
-            //I can check the size only if the server respond with the expected size
+            //Here i will try to find the file and check its size to make sure it's not corrupt
+            //I can check the size only if the server respond with the expected size this is a place for a bug
             if (lenghtOfFile != -1 && !validateFileSize(lenghtOfFile, file,activity))
             {
                 Log.e(TAG, "File is corrupt , deleting the file");
@@ -303,7 +300,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                    // activity.finish();
                 }
             } else {
-                Log.e(TAG, "File has been downloaded secessfuly");
+                Log.e(TAG, "File has been downloaded successfully");
                 //We declare this download as completed
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -320,7 +317,6 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
 
         }catch(Exception e)
         {
-
 //            Log.e(TAG,e.getMessage());
             Log.e(TAG, "File is corrupt , deleting the file");
             //Delete the file

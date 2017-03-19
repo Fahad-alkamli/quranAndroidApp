@@ -429,9 +429,6 @@ public class PlayerActivity extends AppCompatActivity {
                 playerIsVisiable=false;
                 if(mPlayer!=null)
                 {
-                    mPlayer.stop();
-                    mPlayer.release();
-                    mPlayer=null;
                     stop(null);
                 }
             } catch (Exception e)

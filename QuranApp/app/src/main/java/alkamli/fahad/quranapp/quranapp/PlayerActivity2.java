@@ -23,6 +23,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static alkamli.fahad.quranapp.quranapp.CommonFunctions.getFreeSpace;
+import static alkamli.fahad.quranapp.quranapp.CommonFunctions.validateFileSize;
+
 public class PlayerActivity2 extends AppCompatActivity {
 
     static TextView titleTextview;
@@ -309,7 +312,7 @@ public class PlayerActivity2 extends AppCompatActivity {
 
             //Here i will try to find the file and check it's size to make sure it's not corrupt
             //I can check the size only if the server respond with the expected size
-            if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file))
+            if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file,getApplicationContext()))
             {
                 Log.e(TAG,"File is corrupt , deleting the file");
                 //Delete the file
@@ -391,30 +394,6 @@ public class PlayerActivity2 extends AppCompatActivity {
         //Done
     }
 
-    private boolean validateFileSize(long expectedSize,String fileName)
-    {
-        try{
-            //Here i will try to find the file and check it's size to make sure it's not corrupt
-            File file2=new File(getApplicationInfo().dataDir+"/"+fileName);
-            if(file2.exists())
-            {
-                // Log.e(TAG,"Written file length: "+file2.length());
-
-                if(file2.length()==expectedSize)
-                {
-                    return true;
-                }
-            }
-
-
-        }catch(Exception e)
-        {
-            Log.e(TAG,e.getMessage());
-        }
-        return false;
-
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -438,37 +417,6 @@ public class PlayerActivity2 extends AppCompatActivity {
     }
 
 
-
-    /**
-     * This function find outs the free space for the given path.
-     *http://stackoverflow.com/questions/16076122/android-how-to-handle-saving-file-on-low-device-memoryinternal-external-memor
-     * @return Bytes. Number of free space in bytes.
-     */
-    public static long getFreeSpace()
-    {
-        try
-        {
-            if (Environment.getExternalStorageDirectory() != null
-                    && Environment.getExternalStorageDirectory().getPath() != null)
-            {
-                StatFs m_stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-                long m_blockSize = m_stat.getBlockSizeLong();
-                long m_availableBlocks = m_stat.getAvailableBlocksLong();
-                return (m_availableBlocks * m_blockSize);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -478,9 +426,6 @@ public class PlayerActivity2 extends AppCompatActivity {
                 playerIsVisiable=false;
                 if(mPlayer!=null)
                 {
-                    mPlayer.stop();
-                    mPlayer.release();
-                    mPlayer=null;
                     stop(null);
                 }
             } catch (Exception e)
