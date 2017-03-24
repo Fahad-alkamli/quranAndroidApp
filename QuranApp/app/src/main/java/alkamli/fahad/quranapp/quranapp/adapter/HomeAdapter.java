@@ -4,9 +4,11 @@ package alkamli.fahad.quranapp.quranapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder>{
         {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
+            String size=CommonFunctions.getSharedPreferences(context).getString("titlesSize",null);
+            if( size!= null && size.equals(CommonFunctions.textSizes.defaultSize.name())==false)
+            {
+                if(CommonFunctions.textSizes.smallSize.name().equals(size))
+                {
+
+                    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                }
+                if(CommonFunctions.textSizes.largeSize.name().equals(size))
+                {
+                    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);;
+                }
+            }
+
             line = (TextView) view.findViewById(R.id.line);
              this.view=view;
         }

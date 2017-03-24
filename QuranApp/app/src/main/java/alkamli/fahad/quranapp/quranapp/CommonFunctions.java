@@ -21,6 +21,11 @@ public class CommonFunctions {
 
 
     public static final String TAG="Alkamli";
+    public enum textSizes{
+        smallSize,
+        defaultSize,
+        largeSize
+    }
     private static final ArrayList<String> QUEUEArrayList=new ArrayList<String>()
     {
         @Override

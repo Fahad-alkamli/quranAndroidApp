@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">القران الكريم</string>
     <string name="pause">ايقاف مؤقت</string>
     <string name="rewind">اعادة</string>
     <string name="play">تشغيل</string>
@@ -128,8 +129,6 @@
     <string name="An_Nas">النّاس</string>
 
 
-
-
     <string name="downloading">جاري التحميل ..</string>
     <string name="internet_connection_error">خطأ: الرجاء التاكد من وجود اتصال بالانترنيت</string>
     <string name="file_is_corrupt">خطأ: الملف تالف الرجاء معاودة التحميل</string>
@@ -139,5 +138,9 @@
     <string name="cancel_the_download">الغاء التحميل</string>
     <string name="cancel_all_downloads">الغاء الجميع</string>
     <string name="download_all">تحميل الجميع</string>
+    <string name="choose_the_titles_size">اختر مقاس خط العناوين</string>
+    <string name="small_size_18sp">خط صغير 18sp</string>
+    <string name="default_size_25sp">خط افتراضي 25sp</string>
+    <string name="large_size_30sp">خط كبير 30sp</string>
 
 </resources>

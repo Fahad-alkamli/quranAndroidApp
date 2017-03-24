@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +53,20 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
         {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
+
+            String size=CommonFunctions.getSharedPreferences(activity).getString("titlesSize",null);
+            if( size!= null && size.equals(CommonFunctions.textSizes.defaultSize.name())==false)
+            {
+                if(CommonFunctions.textSizes.smallSize.name().equals(size))
+                {
+                    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                }
+                if(CommonFunctions.textSizes.largeSize.name().equals(size))
+                {
+                    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);;
+                }
+
+            }
             progressBar=(ProgressBar)  view.findViewById(R.id.progressBar);
             this.view=view;
         }
@@ -160,6 +175,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             if(CommonFunctions.getQueue().contains(file))
             {
                 //file is being downloaded by other process
+                Log.d(TAG,"file is being downloaded by other process:"+file);
                 return;
             }
             {
@@ -285,7 +301,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             //I can check the size only if the server respond with the expected size this is a place for a bug
             if (lenghtOfFile != -1 && !validateFileSize(lenghtOfFile, file,activity))
             {
-                Log.e(TAG, "File is corrupt , deleting the file");
+                Log.e(TAG, "File is corrupt , deleting the file, length does not match");
                 //Delete the file
                 File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
                 if (file2.exists())
@@ -299,8 +315,11 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                     });
                    // activity.finish();
                 }
+                //remove it from the queue first
+                CommonFunctions.removeFromQueue(file);
             } else {
                 Log.e(TAG, "File has been downloaded successfully");
+                CommonFunctions.removeFromQueue(file);
                 //We declare this download as completed
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -317,8 +336,9 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
 
         }catch(Exception e)
         {
-//            Log.e(TAG,e.getMessage());
-            Log.e(TAG, "File is corrupt , deleting the file");
+          Log.e(TAG,e.getMessage());
+            Log.e(TAG, "File is corrupt , deleting the file, some problem");
+
             //Delete the file
             File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
             if (file2.exists())

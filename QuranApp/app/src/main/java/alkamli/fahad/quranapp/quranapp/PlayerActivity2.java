@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +56,20 @@ public class PlayerActivity2 extends AppCompatActivity {
         progressBarContainer.setVisibility(View.GONE);
         progressBar=(ProgressBar)  findViewById(R.id.progressBar);
         titleTextview=(TextView) findViewById(R.id.title);
+        String size=CommonFunctions.getSharedPreferences(getApplicationContext()).getString("titlesSize",null);
+        if( size!= null && size.equals(CommonFunctions.textSizes.defaultSize.name())==false)
+        {
+            if(CommonFunctions.textSizes.smallSize.name().equals(size))
+            {
+
+                titleTextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            }
+            if(CommonFunctions.textSizes.largeSize.name().equals(size))
+            {
+                titleTextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);;
+            }
+
+        }
         titleTextview.setText(title);
         playButton=(Button) findViewById(R.id.playButton);
         //Play the sound on the first open
@@ -315,6 +330,8 @@ public class PlayerActivity2 extends AppCompatActivity {
             if(lenghtOfFile !=-1 && !validateFileSize(lenghtOfFile,file,getApplicationContext()))
             {
                 Log.e(TAG,"File is corrupt , deleting the file");
+                //remove it from the queue first
+                CommonFunctions.removeFromQueue(file);
                 //Delete the file
                 File file2=new File(getApplicationInfo().dataDir+"/"+file);
                 if(file2.exists())

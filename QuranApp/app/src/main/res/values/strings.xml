@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuranApp</string>
+    <string name="app_name">Quran App</string>
     <string name="files_url">http://server6.mp3quran.net/thubti/</string>
 
     <string name="rewind">Rewind</string>
@@ -137,4 +137,8 @@
     <string name="cancel_the_download">Cancel The Download</string>
     <string name="cancel_all_downloads">Cancel All</string>
     <string name="download_all">Download All</string>
+    <string name="choose_the_titles_size">Choose The Titles size:</string>
+    <string name="small_size_18sp">Small Size: 18sp</string>
+    <string name="default_size_25sp">Default Size: 25sp</string>
+    <string name="large_size_30sp">Large Size: 30sp</string>
 </resources>

@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +52,25 @@ public class PlayerActivity extends AppCompatActivity {
         progressBar=(ProgressBar)  findViewById(R.id.progressBar);
         titleTextview=(TextView) findViewById(R.id.title);
         titleTextview.setText(title);
+
+        String size=CommonFunctions.getSharedPreferences(getApplicationContext()).getString("titlesSize",null);
+
+        if( size!= null && size.equals(CommonFunctions.textSizes.defaultSize.name())==false)
+        {
+            Log.d(TAG,"Size is : "+size);
+            if(CommonFunctions.textSizes.smallSize.name().equals(size))
+            {
+                Log.d(TAG,"player title size has been set to 18ps");
+                titleTextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            }
+            if(CommonFunctions.textSizes.largeSize.name().equals(size))
+            {
+                Log.d(TAG,"player title size has been set to 30ps");
+                titleTextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);;
+
+            }
+
+        }
         playButton=(Button) findViewById(R.id.playButton);
         playerIsVisiable=true;
         //Play the sound on the first open
@@ -322,6 +342,8 @@ public class PlayerActivity extends AppCompatActivity {
             if(lenghtOfFile !=-1 && !CommonFunctions.validateFileSize(lenghtOfFile,file,getApplicationContext()))
             {
                 Log.e(TAG,"File is corrupt , deleting the file");
+                //remove it from the queue first
+                CommonFunctions.removeFromQueue(file);
                 //Delete the file
                 File file2=new File(getApplicationInfo().dataDir+"/"+file);
                 if(file2.exists())
