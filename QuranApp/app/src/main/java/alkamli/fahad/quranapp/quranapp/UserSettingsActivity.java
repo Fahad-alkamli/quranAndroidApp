@@ -8,7 +8,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import static alkamli.fahad.quranapp.quranapp.CommonFunctions.TAG;
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.textSizes;
+import static android.util.Log.e;
 
 public class UserSettingsActivity extends AppCompatActivity {
 
@@ -88,9 +91,11 @@ public class UserSettingsActivity extends AppCompatActivity {
                 }
 
             }
-        }catch(Exception e)
-        {
-            Log.e(CommonFunctions.TAG,e.getMessage());
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
 
         }
 

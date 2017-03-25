@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Quran App</string>
     <string name="files_url">http://server6.mp3quran.net/thubti/</string>
+    <string name="files_url_backup">http://212.24.105.152/quran/thubti/</string>
+
 
     <string name="rewind">Rewind</string>
     <string name="play">Play</string>
@@ -141,4 +143,5 @@
     <string name="small_size_18sp">Small Size: 18sp</string>
     <string name="default_size_25sp">Default Size: 25sp</string>
     <string name="large_size_30sp">Large Size: 30sp</string>
+
 </resources>

@@ -36,7 +36,13 @@ import alkamli.fahad.quranapp.quranapp.entity.SurahItem;
 
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.TAG;
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.getFreeSpace;
+import static alkamli.fahad.quranapp.quranapp.CommonFunctions.removeFromQueue;
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.validateFileSize;
+import static alkamli.fahad.quranapp.quranapp.R.string;
+import static alkamli.fahad.quranapp.quranapp.R.string.file_is_corrupt;
+import static android.util.Log.e;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 
 
 public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter.MyViewHolder>{
@@ -200,7 +206,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 }
             }
             Looper.prepare();
-            URL url1 = new URL(activity.getString(R.string.files_url) + file);
+            URL url1 = new URL(CommonFunctions.getUsableURL(activity) + file);
             //  Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
             URLConnection conexion = url1.openConnection();
             conexion.connect();
@@ -236,7 +242,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             long total = 0;
             System.out.println("downloading.............");
 
-            Log.e(TAG, "File Total length: " + lenghtOfFile);
+            //Log.e(TAG, "File Total length: " + lenghtOfFile);
             //We initiate the progress bar tag by false indicating that this file has not finished yet
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -269,7 +275,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 //we cancel the download if the cancel all button has been clicked or the user has canceled a download .
                 if(!item.isDownloadState() || StopALL)
                 {
-                    Log.e(TAG,"Download has been Canceled");
+                    Log.d(TAG,"Download has been Canceled");
                 try{
                     {
                         File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
@@ -282,15 +288,17 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                         return;
                     }
 
-                    }catch(Exception e)
-                    {
-                        Log.e(TAG,e.getMessage());
+                    }catch(Exception e) {
+                    class Local {
                     }
+                    ;
+                    e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
+                }
                 }
 
             }
 
-            Log.e(TAG, "Done");
+            Log.d(TAG, "Done");
             output.flush();
             //Release the lock on the file so others can use it
             lock.release();
@@ -318,7 +326,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 //remove it from the queue first
                 CommonFunctions.removeFromQueue(file);
             } else {
-                Log.e(TAG, "File has been downloaded successfully");
+                Log.d(TAG, "File has been downloaded successfully");
                 CommonFunctions.removeFromQueue(file);
                 //We declare this download as completed
                 activity.runOnUiThread(new Runnable() {
@@ -334,26 +342,27 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
             }
 
 
-        }catch(Exception e)
-        {
-          Log.e(TAG,e.getMessage());
-            Log.e(TAG, "File is corrupt , deleting the file, some problem");
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
+            e(TAG, "File is corrupt , deleting the file, some problem");
 
             //Delete the file
             File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
-            if (file2.exists())
-            {
+            if (file2.exists()) {
                 file2.delete();
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(activity.getApplicationContext(), R.string.file_is_corrupt, Toast.LENGTH_SHORT).show();
+                        makeText(activity.getApplicationContext(), file_is_corrupt, LENGTH_SHORT).show();
                     }
                 });
                 //activity.finish();
             }
             //remove it from the queue first
-            CommonFunctions.removeFromQueue(file);
+            removeFromQueue(file);
         }
 
     }

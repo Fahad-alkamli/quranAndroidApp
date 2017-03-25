@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static android.util.Log.e;
+
 public class PlayerActivity extends AppCompatActivity {
 
     static TextView titleTextview;
@@ -36,7 +38,7 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG,"OnCreate");
+        //Log.e(TAG,"OnCreate");
        String title= getIntent().getStringExtra("title");
         order=getIntent().getStringExtra("order");
         if(title==null || order==null)
@@ -75,6 +77,7 @@ public class PlayerActivity extends AppCompatActivity {
         playerIsVisiable=true;
         //Play the sound on the first open
         play(order);
+
     }
 
     @Override
@@ -186,7 +189,10 @@ public class PlayerActivity extends AppCompatActivity {
                 play(order);
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -203,7 +209,10 @@ public class PlayerActivity extends AppCompatActivity {
             }
 
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -273,7 +282,7 @@ public class PlayerActivity extends AppCompatActivity {
                 }
             });
             Looper.prepare();
-            URL url1 = new URL(getString(R.string.files_url)+file);
+            URL url1 = new URL(CommonFunctions.getUsableURL(getApplicationContext())+file);
           //  Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
             URLConnection conexion = url1.openConnection();
             conexion.connect();
@@ -309,7 +318,7 @@ public class PlayerActivity extends AppCompatActivity {
             long total = 0;
             System.out.println("downloading.............");
 
-            Log.e(TAG,"File Total length: "+lenghtOfFile);
+           // Log.e(TAG,"File Total length: "+lenghtOfFile);
             while (CommonFunctions.isNetworkAvailable(getApplicationContext()) && (count = input.read(data)) != -1)
             {
                 total += count;
@@ -330,7 +339,7 @@ public class PlayerActivity extends AppCompatActivity {
                 });
                 //Log.d(TAG,Long.toString(temp));
             }
-           Log.e(TAG,"Done");
+           //Log.e(TAG,"Done");
             output.flush();
             //Release the lock on the file so others can use it
             lock.release();
@@ -360,7 +369,7 @@ public class PlayerActivity extends AppCompatActivity {
                     return;
                 }
             }else{
-                Log.e(TAG,"File has been downloaded secessfuly");
+                //Log.e(TAG,"File has been downloaded secessfuly");
 
             }
 
@@ -375,11 +384,11 @@ public class PlayerActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
                     if(playerIsVisiable)
                     {
-                        Log.e(TAG,"playerIsVisiable");
+                        //Log.e(TAG,"playerIsVisiable");
 
                         play(file);
                     }else{
-                        Log.e(TAG,"playerIsVisiable==false");
+                        //Log.e(TAG,"playerIsVisiable==false");
                     }
                 }
             });
@@ -427,6 +436,7 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG,"Player Activity on destroy");
         try {
             playerIsVisiable=false;
             if(mPlayer!=null)
@@ -435,9 +445,11 @@ public class PlayerActivity extends AppCompatActivity {
                 mPlayer.release();
                 mPlayer=null;
             }
-        } catch (Exception e)
-        {
-            Log.e(TAG,e.getMessage());
+        } catch (Exception e) {
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -446,16 +458,18 @@ public class PlayerActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.e(TAG, "back button pressed");
+            //Log.e(TAG, "back button pressed");
             try {
                 playerIsVisiable=false;
                 if(mPlayer!=null)
                 {
                     stop(null);
                 }
-            } catch (Exception e)
-            {
-                Log.e(TAG,e.getMessage());
+            } catch (Exception e) {
+                class Local {
+                }
+                ;
+                e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
             }
         }
         return super.onKeyDown(keyCode, event);

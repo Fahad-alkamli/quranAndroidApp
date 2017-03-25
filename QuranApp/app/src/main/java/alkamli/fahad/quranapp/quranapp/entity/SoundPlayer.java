@@ -24,6 +24,12 @@ import java.net.URLConnection;
 import alkamli.fahad.quranapp.quranapp.CommonFunctions;
 import alkamli.fahad.quranapp.quranapp.R;
 
+import static alkamli.fahad.quranapp.quranapp.R.string;
+import static alkamli.fahad.quranapp.quranapp.R.string.file_is_corrupt;
+import static android.util.Log.e;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+
 public class SoundPlayer {
     private final String TAG="Alkamli";
     private MediaPlayer mPlayer=null;
@@ -217,26 +223,27 @@ this.order=order;
                     }
                 }
             });
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             try {
                 //If there was an error just delete the file
                 //Delete the file
-                File file2=new File(activity.getApplicationInfo().dataDir+"/"+file);
-                if(file2.exists())
-                {
+                File file2 = new File(activity.getApplicationInfo().dataDir + "/" + file);
+                if (file2.exists()) {
                     file2.delete();
-                    activity.runOnUiThread(new Runnable(){
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(activity.getApplicationContext(), R.string.file_is_corrupt,Toast.LENGTH_SHORT).show();
+                            makeText(activity.getApplicationContext(), file_is_corrupt, LENGTH_SHORT).show();
                         }
                     });
                 }
             } catch (Exception e1) {
-                Log.e(TAG,e1.getMessage());
+                e(TAG, e1.getMessage());
             }
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
 
             activity.finish();
             //What if there was a problem how are we going to handle this?
@@ -269,9 +276,11 @@ this.order=order;
             }
 
 
-        }catch(Exception e)
-        {
-            Log.e(TAG,e.getMessage());
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
         return false;
 
@@ -291,7 +300,10 @@ this.order=order;
             }
 
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 

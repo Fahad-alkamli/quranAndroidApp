@@ -26,6 +26,7 @@ import java.net.URLConnection;
 
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.getFreeSpace;
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.validateFileSize;
+import static android.util.Log.e;
 
 public class PlayerActivity2 extends AppCompatActivity {
 
@@ -161,7 +162,10 @@ public class PlayerActivity2 extends AppCompatActivity {
             playButton.setText(getString(R.string.play));
             playButton.setTag(false);
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -175,7 +179,10 @@ public class PlayerActivity2 extends AppCompatActivity {
                 play(order);
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -191,7 +198,10 @@ public class PlayerActivity2 extends AppCompatActivity {
                 mPlayer = null;
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -211,7 +221,10 @@ public class PlayerActivity2 extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -230,7 +243,10 @@ public class PlayerActivity2 extends AppCompatActivity {
 
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
 
     }
@@ -261,7 +277,7 @@ public class PlayerActivity2 extends AppCompatActivity {
                 }
             });
             Looper.prepare();
-            URL url1 = new URL(getString(R.string.files_url)+file);
+            URL url1 = new URL(CommonFunctions.getUsableURL(getApplicationContext())+file);
             //  Log.e(TAG,"http://server6.mp3quran.net/thubti/"+file);
             URLConnection conexion = url1.openConnection();
             conexion.connect();
@@ -297,7 +313,7 @@ public class PlayerActivity2 extends AppCompatActivity {
             long total = 0;
             System.out.println("downloading.............");
 
-            Log.e(TAG,"File Total length: "+lenghtOfFile);
+           // Log.e(TAG,"File Total length: "+lenghtOfFile);
             while (CommonFunctions.isNetworkAvailable(getApplicationContext()) && (count = input.read(data)) != -1)
             {
                 total += count;
@@ -311,14 +327,13 @@ public class PlayerActivity2 extends AppCompatActivity {
                             progressBarContainer.setVisibility(View.VISIBLE);
                             progressBar.setMax(lenghtOfFile);
                             progressBar.setProgress(((int) temp));
-
                         }
 
                     }
                 });
                 //Log.d(TAG,Long.toString(temp));
             }
-            Log.e(TAG,"Done");
+            //Log.e(TAG,"Done");
             output.flush();
             //Release the lock on the file so others can use it
             lock.release();
@@ -348,7 +363,7 @@ public class PlayerActivity2 extends AppCompatActivity {
                     return;
                 }
             }else{
-                Log.e(TAG,"File has been downloaded secessfuly");
+                //Log.e(TAG,"File has been downloaded secessfuly");
 
             }
 
@@ -363,11 +378,11 @@ public class PlayerActivity2 extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),R.string.download_finish,Toast.LENGTH_SHORT).show();
                     if(playerIsVisiable)
                     {
-                        Log.e(TAG,"playerIsVisiable");
+                       // Log.e(TAG,"playerIsVisiable");
 
                         play(file);
                     }else{
-                        Log.e(TAG,"playerIsVisiable==false");
+                       // Log.e(TAG,"playerIsVisiable==false");
                     }
                 }
             });
@@ -423,7 +438,10 @@ public class PlayerActivity2 extends AppCompatActivity {
                 mPlayer=null;
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            class Local {
+            }
+            ;
+            e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -438,16 +456,18 @@ public class PlayerActivity2 extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.e(TAG, "back button pressed");
+            //Log.e(TAG, "back button pressed");
             try {
                 playerIsVisiable=false;
                 if(mPlayer!=null)
                 {
                     stop(null);
                 }
-            } catch (Exception e)
-            {
-                Log.e(TAG,e.getMessage());
+            } catch (Exception e) {
+                class Local {
+                }
+                ;
+                e(CommonFunctions.TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
             }
         }
         return super.onKeyDown(keyCode, event);

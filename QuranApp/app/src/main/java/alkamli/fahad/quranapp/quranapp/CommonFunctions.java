@@ -10,11 +10,15 @@ import android.os.StatFs;
 import android.util.Log;
 
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import alkamli.fahad.quranapp.quranapp.entity.SurahItem;
 
+import static alkamli.fahad.quranapp.quranapp.CommonFunctions.TAG;
 import static android.content.Context.MODE_PRIVATE;
+import static android.util.Log.e;
 
 
 public class CommonFunctions {
@@ -45,9 +49,11 @@ public class CommonFunctions {
                 {
                     return true;
                 }
-            }catch(Exception e)
-            {
-                Log.e(TAG,e.getMessage());
+            }catch(Exception e) {
+                class Local {
+                }
+                ;
+                e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
             }
             return false;
         }
@@ -223,14 +229,16 @@ public class CommonFunctions {
                 {
                     if (!file.isDirectory() && file.getName().contains(".mp3"))
                     {
-                        Log.e(TAG, file.getName());
+                        //Log.e(TAG, file.getName());
                         file.delete();
                     }
                 }
             }
-        }catch(Exception e)
-        {
-            Log.e(TAG,e.getMessage());
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -249,9 +257,11 @@ public class CommonFunctions {
            }else{
                getQueue().add(argument);
            }
-        }catch(Exception e)
-        {
-            Log.e(TAG,e.getMessage());
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
     }
 
@@ -271,17 +281,19 @@ public class CommonFunctions {
             File file2=new File(context.getApplicationInfo().dataDir+"/"+fileName);
             if(file2.exists())
             {
-                Log.e(TAG,"Written file length: "+file2.length());
-                Log.e(TAG,"ExpectedSize to be:"+expectedSize);
+                //Log.e(TAG,"Written file length: "+file2.length());
+                //Log.e(TAG,"ExpectedSize to be:"+expectedSize);
                 if(file2.length()==expectedSize)
                 {
                     return true;
                 }
             }
 
-        }catch(Exception e)
-        {
-            Log.e(TAG,e.getMessage());
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
         }
         return false;
 
@@ -314,5 +326,29 @@ public class CommonFunctions {
             e.printStackTrace();
             return 0;
         }
+    }
+
+
+
+    //http://stackoverflow.com/questions/1443166/android-how-to-check-if-the-server-is-available
+    public static String getUsableURL(Context context)
+    {
+        try{
+            URL url = new URL(context.getString(R.string.files_url));   // Change to "http://google.com" for www  test.
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            urlc.setConnectTimeout(5 * 1000);          // 10 s.
+            urlc.connect();
+            if (urlc.getResponseCode() == 200)
+            {        // 200 = "OK" code (http connection is fine).
+                Log.d("Connection", "Success !");
+                return context.getString(R.string.files_url);
+            }
+        }catch(Exception e) {
+            class Local {
+            }
+            ;
+            e(TAG, ("MethodName: " + Local.class.getEnclosingMethod().getName() + " || ErrorMessage: " + e.getMessage()));
+        }
+        return context.getString(R.string.files_url_backup);
     }
 }
