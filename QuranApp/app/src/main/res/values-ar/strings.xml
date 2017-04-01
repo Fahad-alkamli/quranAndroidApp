@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">القران الكريم</string>
+    <string name="files_url">http://server6.mp3quran.net/thubti/</string>
+    <string name="files_url_backup">http://212.24.105.152/quran/thubti/</string>
+
+
     <string name="pause">ايقاف مؤقت</string>
     <string name="rewind">اعادة</string>
     <string name="play">تشغيل</string>
@@ -142,5 +146,6 @@
     <string name="small_size_18sp">خط صغير 18sp</string>
     <string name="default_size_25sp">خط افتراضي 25sp</string>
     <string name="large_size_30sp">خط كبير 30sp</string>
+    <string name="delete_this_sourah">حذف هذه السورة</string>
 
 </resources>

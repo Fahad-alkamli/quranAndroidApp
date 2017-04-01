@@ -1,5 +1,6 @@
 package alkamli.fahad.quranapp.quranapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,11 +16,13 @@ import alkamli.fahad.quranapp.quranapp.adapter.HomeAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
-    RecyclerView list;
+    static RecyclerView list;
+    static Context context=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context=this;
         list=(RecyclerView) findViewById(R.id.list);
         list.setAdapter(new HomeAdapter(this, CommonFunctions.getSourahList(this)));
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -80,6 +83,21 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public static void updateAdapter()
+    {
+        try{
+            if(context != null && list != null)
+            {
+                list.setAdapter(new HomeAdapter(context, CommonFunctions.getSourahList(context)));
+                list.setLayoutManager(new LinearLayoutManager(context));
+            }
+
+        }catch(Exception e)
+        {
+            Log.e(CommonFunctions.TAG,e.getMessage());
+        }
+
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

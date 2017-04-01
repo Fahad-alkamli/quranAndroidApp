@@ -58,19 +58,41 @@ public class UserSettingsActivity extends AppCompatActivity {
                 public void onCheckedChanged(RadioGroup radioGroup, @IdRes int checkedID) {
                     Log.d(CommonFunctions.TAG, "Size has been changed");
                    // Log.d(CommonFunctions.TAG, "Check this: " + R.id.smallSize);
-                    switch (checkedID) {
-                        case R.id.smallSize: {
-                            CommonFunctions.getEditor(getApplicationContext()).putString("titlesSize", textSizes.smallSize.name()).commit();
+
+                    try {
+                        String size = CommonFunctions.getSharedPreferences(getApplicationContext()).getString("titlesSize", null);
+                        switch (checkedID) {
+                            case R.id.smallSize:
+                                {
+                                CommonFunctions.getEditor(getApplicationContext()).putString("titlesSize", textSizes.smallSize.name()).commit();
+                           if(size!= null &&size.equals(textSizes.smallSize.name())==false)
+                           {
+                               HomeActivity.updateAdapter();
+                           }
+
+                            }
+                            break;
+                            case R.id.defaultSize:
+                                {
+                                CommonFunctions.getEditor(getApplicationContext()).putString("titlesSize", textSizes.defaultSize.name()).commit();
+                                    if(size!= null &&size.equals(textSizes.defaultSize.name())==false)
+                                    {
+                                        HomeActivity.updateAdapter();
+                                    }
+                                }
+                            break;
+                            case R.id.largeSize:
+                                {
+                                CommonFunctions.getEditor(getApplicationContext()).putString("titlesSize", textSizes.largeSize.name()).commit();
+                                    if(size!= null &&size.equals(textSizes.largeSize.name())==false)
+                                    {
+                                        HomeActivity.updateAdapter();
+                                    }
+                                }
+                            break;
                         }
-                        break;
-                        case R.id.defaultSize: {
-                            CommonFunctions.getEditor(getApplicationContext()).putString("titlesSize", textSizes.defaultSize.name()).commit();
-                        }
-                        break;
-                        case R.id.largeSize: {
-                            CommonFunctions.getEditor(getApplicationContext()).putString("titlesSize", textSizes.largeSize.name()).commit();
-                        }
-                        break;
+                    } catch (Exception e) {
+                        Log.e(TAG,e.getMessage());
                     }
 
 
@@ -80,12 +102,15 @@ public class UserSettingsActivity extends AppCompatActivity {
 
             //set the default size if it has been changed
             String size = CommonFunctions.getSharedPreferences(this).getString("titlesSize", null);
-            if (size != null && size.equals(textSizes.defaultSize.name()) == false) {
-                if (textSizes.smallSize.name().equals(size)) {
+            if (size != null && size.equals(textSizes.defaultSize.name()) == false)
+            {
+                if (textSizes.smallSize.name().equals(size))
+                {
                     RadioButton smallSize = (RadioButton) findViewById(R.id.smallSize);
                     smallSize.setChecked(true);
                 }
-                if (textSizes.largeSize.name().equals(size)) {
+                if (textSizes.largeSize.name().equals(size))
+                {
                     RadioButton largeSize = (RadioButton) findViewById(R.id.largeSize);
                     largeSize.setChecked(true);
                 }

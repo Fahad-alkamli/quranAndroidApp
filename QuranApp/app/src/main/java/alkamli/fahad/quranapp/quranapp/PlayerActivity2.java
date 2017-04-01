@@ -1,5 +1,6 @@
 package alkamli.fahad.quranapp.quranapp;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Looper;
@@ -10,6 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -426,6 +430,45 @@ public class PlayerActivity2 extends AppCompatActivity {
         //Done
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.player_toolbar, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId())
+        {
+            case R.id.deleteSourah:
+            {
+                try{
+
+                    //Don't forget to make sure that the file is not being downloaded
+                    if(order != null && CommonFunctions.getQueue().contains(order)==false )
+                    {
+                        //Delete the file and exit the activity
+                        File file2=new File(getApplicationInfo().dataDir+"/"+order);
+                        if(file2.exists())
+                        {
+                            stop(null);
+                            file2.delete();
+                            Intent i=new Intent(getApplicationContext(),HomeActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+                }catch(Exception e)
+                {
+                    Log.e(TAG,e.getMessage());
+                }
+
+                break;
+            }
+        }
+        return true;
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
