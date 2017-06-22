@@ -276,7 +276,8 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 });
             }
-
+            //put the file in the queue
+            CommonFunctions.putInQueue(file,this);
             //let's check for internet connection first
 
             //Hide the content and show the progress bar
@@ -292,8 +293,6 @@ public class PlayerActivity extends AppCompatActivity {
             URLConnection conexion = url1.openConnection();
             conexion.connect();
             final int lenghtOfFile = conexion.getContentLength();
-            //put the file in the queue
-            CommonFunctions.putInQueue(file);
             if(lenghtOfFile!=-1 && lenghtOfFile>0)
             {
                 if(CommonFunctions.getFreeSpace()<lenghtOfFile)
@@ -357,7 +356,7 @@ public class PlayerActivity extends AppCompatActivity {
             {
                 Log.e(TAG,"File is corrupt , deleting the file");
                 //remove it from the queue first
-                CommonFunctions.removeFromQueue(file);
+                CommonFunctions.removeFromQueue(file,this);
                 //Delete the file
                 File file2=new File(getApplicationInfo().dataDir+"/"+file);
                 if(file2.exists())
@@ -379,7 +378,7 @@ public class PlayerActivity extends AppCompatActivity {
             }
 
             //remove it from the queue first
-            CommonFunctions.removeFromQueue(file);
+            CommonFunctions.removeFromQueue(file,this);
 
             //Next play the sound but before that make sure that the user is still on the screen and didn't close it
             runOnUiThread(new Runnable(){
@@ -403,7 +402,7 @@ public class PlayerActivity extends AppCompatActivity {
                 //If there was an error just delete the file
                 //Delete the file
                 //remove it from the queue first
-                CommonFunctions.removeFromQueue(file);
+                CommonFunctions.removeFromQueue(file,this);
                 File file2=new File(getApplicationInfo().dataDir+"/"+file);
                 if(file2.exists())
                 {

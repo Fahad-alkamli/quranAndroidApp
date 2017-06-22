@@ -50,6 +50,8 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
     private ArrayList<SurahItem> SourahList;
     public static boolean StopALL=false;
     private Activity activity;
+    public  ArrayList<MyViewHolder> allHolders=new ArrayList<MyViewHolder>();
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
        public ProgressBar progressBar;
@@ -140,14 +142,15 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
 
         //we start the download here but we need to keep track the state. meaning if the user clicked paused we need that function to pause
         //
-        new Thread(new Runnable(){
+      /*  new Thread(new Runnable(){
             @Override
             public void run() {
 
                 downloadFile(item,holder.progressBar);
             }
-        }).start();
+        }).start();*/
 
+        allHolders.add(holder);
 
     }
     @Override
@@ -234,7 +237,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 });
             }
             //put the file in the queue so we can start the download process
-            CommonFunctions.putInQueue(file);
+            CommonFunctions.putInQueue(file,activity);
             InputStream input = new BufferedInputStream(url1.openStream());
             FileOutputStream output = new FileOutputStream(activity.getApplicationInfo().dataDir + "/" + file);
             java.nio.channels.FileLock lock = output.getChannel().lock();
@@ -283,7 +286,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                         {
                             file2.delete();
                         }
-                        CommonFunctions.removeFromQueue(file);
+                        CommonFunctions.removeFromQueue(file,activity);
                         progressBar.setTag(true);
                         return;
                     }
@@ -324,10 +327,10 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                    // activity.finish();
                 }
                 //remove it from the queue first
-                CommonFunctions.removeFromQueue(file);
+                CommonFunctions.removeFromQueue(file,activity);
             } else {
                 Log.d(TAG, "File has been downloaded successfully");
-                CommonFunctions.removeFromQueue(file);
+                CommonFunctions.removeFromQueue(file,activity);
                 //We declare this download as completed
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -362,7 +365,7 @@ public class DownloadAllAdapter extends  RecyclerView.Adapter<DownloadAllAdapter
                 //activity.finish();
             }
             //remove it from the queue first
-            removeFromQueue(file);
+            removeFromQueue(file,activity);
         }
 
     }

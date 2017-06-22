@@ -1,6 +1,7 @@
 package alkamli.fahad.quranapp.quranapp;
 
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,6 +14,8 @@ import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import alkamli.fahad.quranapp.quranapp.entity.SurahItem;
 
@@ -248,14 +251,20 @@ public class CommonFunctions {
         return QUEUEArrayList;
     }
 
-    public static synchronized void putInQueue(String argument)
+    public static synchronized void putInQueue(String argument,Context context)
     {
         try{
            if(getQueue().contains(argument))
            {
+               Log.d(TAG,argument+" already exists in the queue");
                return;
            }else{
                getQueue().add(argument);
+               Log.d(TAG,argument+" has been added to the queue");
+               //update the stored list
+               Set<String> set = new HashSet<String>();
+               set.addAll(getQueue());
+               getEditor(context).putStringSet("queueList",set).commit();
            }
         }catch(Exception e) {
             class Local {
@@ -265,13 +274,22 @@ public class CommonFunctions {
         }
     }
 
-    public static synchronized  void removeFromQueue(String arg)
+    public static synchronized  void removeFromQueue(String arg,Context context)
     {
-        if(getQueue().contains(arg))
-        {
-            getQueue().remove(arg);
-        }
+        try{
 
+            if(getQueue().contains(arg))
+            {
+                getQueue().remove(arg);
+            }
+            //update the stored list
+            Set<String> set = new HashSet<String>();
+            set.addAll(getQueue());
+            getEditor(context).putStringSet("queueList",set).commit();
+        }catch(Exception e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
     }
 
     public static boolean validateFileSize(long expectedSize,String fileName,Context context)

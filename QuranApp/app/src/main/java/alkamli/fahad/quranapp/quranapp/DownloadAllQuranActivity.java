@@ -1,7 +1,9 @@
 package alkamli.fahad.quranapp.quranapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,17 +21,20 @@ import alkamli.fahad.quranapp.quranapp.entity.SurahItem;
 
 public class DownloadAllQuranActivity extends AppCompatActivity {
 
-    static RecyclerView list;
+     RecyclerView list;
     Context context;
     DownloadAllAdapter adapter ;
+    Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_all_quran);
         context=this;
+        activity=this;
         list=(RecyclerView) findViewById(R.id.list);
         adapter=new DownloadAllAdapter(this, CommonFunctions.getSourahList(this));
+
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(this));
 
