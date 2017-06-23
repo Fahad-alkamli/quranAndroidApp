@@ -2,6 +2,7 @@ package alkamli.fahad.quranapp.quranapp;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class DownloadManagement {
     }
 
     public static boolean active=false;
+
     static  Activity activity;
     ArrayList<SurahItem> allSourahs;
     public DownloadManagement(ArrayList<SurahItem> allSourahs,Activity activity)
@@ -93,6 +95,7 @@ public class DownloadManagement {
                {
                    //Cancel the while thing because we don't have internet connection
                    removeFromQueue(file,getActivity());
+                   active=false;
                    return;
                }else if(currentState==State.Corrupt)
                {
@@ -103,6 +106,11 @@ public class DownloadManagement {
                }else if(currentState==State.Canceled || currentState==State.NoSpace)
                {
                    //Cancel all
+                   CommonFunctions.removeFromQueue(file,getActivity());
+                   Intent i=new Intent(getActivity(),HomeActivity.class);
+                   getActivity().startActivity(i);
+                   getActivity().finish();
+                   active=false;
                    return;
                }else{
                    Log.e(TAG,"This is wrong!");
@@ -130,6 +138,8 @@ public class DownloadManagement {
     {
         activity=activity1;
     }
+
+
     private State downloadFile(SurahItem item)
     {
         //http://server6.mp3quran.net/thubti/001.mp3
@@ -182,7 +192,7 @@ public class DownloadManagement {
 
             }
             //put the file in the queue so we can start the download process
-            CommonFunctions.putInQueue(file,getActivity());
+           // CommonFunctions.putInQueue(file,getActivity());
             InputStream input = new BufferedInputStream(url1.openStream());
             FileOutputStream output = new FileOutputStream(getActivity().getApplicationInfo().dataDir + "/" + file);
             java.nio.channels.FileLock lock = output.getChannel().lock();
@@ -201,7 +211,8 @@ public class DownloadManagement {
                 iniProgressBar(lenghtOfFile,item.getTitle());
                 //Update the progressbar
                 updateProgress(((int) temp));
-                if(!item.isDownloadState())
+                boolean stop=((DownloadMonitorActivity) getActivity()).stopAll;
+                if(stop)
                 {
                     Log.d(TAG,"Download has been Canceled");
                     try{
@@ -211,7 +222,12 @@ public class DownloadManagement {
                             {
                                 file3.delete();
                             }
-                            CommonFunctions.removeFromQueue(file,getActivity());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast. makeText(getActivity(), R.string.download_has_been_canceled,Toast.LENGTH_SHORT).show();
+                                }
+                            });
                             return State.Canceled;
                         }
 
@@ -296,7 +312,7 @@ public class DownloadManagement {
                 return;
             }
             ProgressBar progressBar=(ProgressBar) getActivity().findViewById(R.id.progressBar);
-            if ((progressBar.getProgress()*1.4)<progress)
+            if ((progressBar.getProgress()*1.3)<progress)
             {
                 getActivity().runOnUiThread(new Runnable(){
                     @Override
@@ -338,6 +354,9 @@ public class DownloadManagement {
             Log.e(TAG,e.getMessage());
         }
     }
+
+
+
 }
 
 

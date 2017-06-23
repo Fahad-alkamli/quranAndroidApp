@@ -5,4 +5,8 @@
         android:id="@+id/deleteSourah"
         app:showAsAction="always"
         android:title="@string/delete_this_sourah" />
+    <item
+        android:id="@+id/cancelDownload"
+        app:showAsAction="always"
+        android:title="@string/cancel_the_download" />
 </menu>

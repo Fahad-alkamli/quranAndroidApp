@@ -26,6 +26,7 @@ import java.util.Set;
 import alkamli.fahad.quranapp.quranapp.adapter.HomeAdapter;
 
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.TAG;
+import static alkamli.fahad.quranapp.quranapp.CommonFunctions.getQueue;
 import static alkamli.fahad.quranapp.quranapp.CommonFunctions.getSharedPreferences;
 
 public class HomeActivity extends AppCompatActivity {
@@ -139,6 +140,13 @@ public class HomeActivity extends AppCompatActivity {
     private void checkForFilesWaitingInTheList()
     {
         try{
+            if(CommonFunctions.getSharedPreferences(context).getBoolean("resumeDownload", false))
+            {
+                //clear the list
+                getQueue().clear();
+                CommonFunctions.getEditor(context).remove("queueList").commit();
+                return;
+            }
             Log.d(TAG,"checkForFilesWaitingInTheList");
             Set tempSet=CommonFunctions.getSharedPreferences(this).getStringSet("queueList",null);
 

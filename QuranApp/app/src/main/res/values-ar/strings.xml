@@ -147,5 +147,6 @@
     <string name="default_size_25sp">خط افتراضي 25sp</string>
     <string name="large_size_30sp">خط كبير 30sp</string>
     <string name="delete_this_sourah">حذف هذه السورة</string>
-
+    <string name="download_has_been_canceled">تم الغاء التحميل بنجاح</string>
+    <string name="don_t_redownload_after_closing_app">لاتقم باعادة التحميل بعد اغلاق البرنامج</string>
 </resources>

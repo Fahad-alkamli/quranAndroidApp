@@ -17,6 +17,7 @@ public class UserSettingsActivity extends AppCompatActivity {
 
     CheckBox replaceIconsCheckBox;
     CheckBox deleteFilesCheckBox;
+    CheckBox resumeDownloadOption;
     RadioGroup radioGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class UserSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_settings);
         replaceIconsCheckBox=(CheckBox) findViewById(R.id.replaceIconsCheckBox);
         deleteFilesCheckBox=(CheckBox) findViewById(R.id.deleteFilesCheckBox);
+        resumeDownloadOption=(CheckBox) findViewById(R.id.restoreDownloadingfiles);
         radioGroup=(RadioGroup)  findViewById(R.id.radioGroup);
 
         try {
@@ -38,7 +40,13 @@ public class UserSettingsActivity extends AppCompatActivity {
             if (CommonFunctions.getSharedPreferences(this).getBoolean("textButtons", false)) {
                 replaceIconsCheckBox.setChecked(true);
             }
-
+            resumeDownloadOption.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    // Log.e(CommonFunctions.TAG,Boolean.toString(b));
+                    CommonFunctions.getEditor(getApplicationContext()).putBoolean("resumeDownload", b).commit();
+                }
+            });
 
             deleteFilesCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -48,8 +56,13 @@ public class UserSettingsActivity extends AppCompatActivity {
                 }
             });
             //Set the default option if it exists
-            if (CommonFunctions.getSharedPreferences(this).getBoolean("deleteFilesAfterPlaying", false)) {
+            if (CommonFunctions.getSharedPreferences(this).getBoolean("deleteFilesAfterPlaying", false))
+            {
                 deleteFilesCheckBox.setChecked(true);
+            }
+            if (CommonFunctions.getSharedPreferences(this).getBoolean("resumeDownload", false))
+            {
+                resumeDownloadOption.setChecked(true);
             }
 
             //set the size for titles

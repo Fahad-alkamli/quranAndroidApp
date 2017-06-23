@@ -224,8 +224,10 @@ public class CommonFunctions {
     public static void checkForDeleteFilesOption(Context context)
     {
         try {
+
             //Delete all the files if this option has been selected
-            if (CommonFunctions.getSharedPreferences(context).getBoolean("deleteFilesAfterPlaying", false)) {
+            if (CommonFunctions.getSharedPreferences(context).getBoolean("deleteFilesAfterPlaying", false))
+            {
                 //Delete all the files if they exists
                 //http://stackoverflow.com/questions/13195797/delete-all-files-in-directory-but-not-directory-one-liner-solution
                 for (File file : new java.io.File(context.getApplicationInfo().dataDir).listFiles())
@@ -354,7 +356,7 @@ public class CommonFunctions {
         try{
             URL url = new URL(context.getString(R.string.files_url));   // Change to "http://google.com" for www  test.
             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            urlc.setConnectTimeout(5 * 1000);          // 10 s.
+            urlc.setConnectTimeout(1000);          // 10 s.
             urlc.connect();
             if (urlc.getResponseCode() == 200)
             {        // 200 = "OK" code (http connection is fine).

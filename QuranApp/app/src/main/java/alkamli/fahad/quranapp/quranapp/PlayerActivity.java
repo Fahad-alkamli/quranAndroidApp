@@ -38,6 +38,7 @@ public class PlayerActivity extends AppCompatActivity {
     private  static final int FAST_FORWARD_TIME=3000;
     private static boolean playerIsVisiable=true;
     private static String order;
+    private boolean stop=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,6 +266,7 @@ public class PlayerActivity extends AppCompatActivity {
         //http://server6.mp3quran.net/thubti/001.mp3
         int count;
         try {
+            stop=false;
             //Check for available internet connection first
             if(!CommonFunctions.isNetworkAvailable(getApplicationContext()))
             {
@@ -328,6 +330,25 @@ public class PlayerActivity extends AppCompatActivity {
                 total += count;
                 output.write(data, 0, count);
                 final long  temp=total;
+                if(stop)
+                {
+                    //stop the download and remove the file from the queue and delete it
+                    //remove it from the queue first
+                    CommonFunctions.removeFromQueue(file,this);
+                    File file2=new File(getApplicationInfo().dataDir+"/"+file);
+                    if(file2.exists())
+                    {
+                        try{
+                            file2.delete();
+                        }catch(Exception e)
+                        {
+                            Log.e(TAG,e.getMessage());
+                        }
+
+                    }
+                    finish();
+                    return;
+                }
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
@@ -372,9 +393,6 @@ public class PlayerActivity extends AppCompatActivity {
 
                     return;
                 }
-            }else{
-                //Log.e(TAG,"File has been downloaded secessfuly");
-
             }
 
             //remove it from the queue first
@@ -391,8 +409,6 @@ public class PlayerActivity extends AppCompatActivity {
                         //Log.e(TAG,"playerIsVisiable");
 
                         play(file);
-                    }else{
-                        //Log.e(TAG,"playerIsVisiable==false");
                     }
                 }
             });
@@ -474,6 +490,10 @@ public class PlayerActivity extends AppCompatActivity {
                 }
 
                 break;
+            }
+            case R.id.cancelDownload:
+            {
+                stop=true;
             }
         }
         return true;
